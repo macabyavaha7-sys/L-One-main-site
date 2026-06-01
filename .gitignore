@@ -1,0 +1,3 @@
+# Local media cache. Site pages should reference external/CDN URLs until
+# we move assets to a dedicated storage service.
+assets/works/**/*.webp
