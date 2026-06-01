@@ -694,6 +694,11 @@
       max-width: 1040px;
       margin: 0 auto 96px;
     }
+    .works-board.is-filtered {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+      align-items: stretch;
+    }
     .work-featured {
       display: grid;
       grid-template-columns: minmax(280px, 1.08fr) minmax(280px, .92fr);
@@ -712,7 +717,9 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, .07);
     }
     .work-featured[hidden],
-    .work-card[hidden] {
+    .work-card[hidden],
+    .works-board.is-filtered .work-featured[hidden],
+    .works-board.is-filtered .work-card[hidden] {
       display: none;
     }
     .work-featured .visual { min-height: 392px; }
@@ -725,6 +732,20 @@
     .work-featured .work-photo {
       min-height: 392px;
       filter: grayscale(.18) contrast(.98);
+    }
+    .works-board.is-filtered .work-featured {
+      display: flex;
+      flex-direction: column;
+      border-radius: 7px;
+      box-shadow: none;
+    }
+    .works-board.is-filtered .work-featured .work-photo {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 1;
+      object-fit: cover;
+      filter: grayscale(.16) contrast(.98);
     }
     .work-copy {
       display: flex;
@@ -750,6 +771,14 @@
       font-size: clamp(28px, 3.2vw, 42px);
       letter-spacing: -.02em;
     }
+    .works-board.is-filtered .work-copy {
+      justify-content: flex-start;
+      padding: 22px 22px 24px;
+    }
+    .works-board.is-filtered .work-copy h2 {
+      font-size: 19px;
+      letter-spacing: 0;
+    }
     .work-copy p,
     .work-card p {
       margin: 18px 0 0;
@@ -757,6 +786,7 @@
       line-height: 1.85;
     }
     .work-copy p { font-size: 14px; }
+    .works-board.is-filtered .work-copy p { font-size: 13px; }
     .work-tags {
       display: flex;
       flex-wrap: wrap;
@@ -793,6 +823,7 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 26px;
     }
+    .works-board.is-filtered .work-grid { display: contents; }
     .work-card {
       display: flex;
       flex-direction: column;
@@ -817,6 +848,53 @@
       aspect-ratio: 1;
       object-fit: cover;
       filter: grayscale(.16) contrast(.98);
+    }
+    .video-card-cover,
+    .video-hero-cover {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      background: #f7f7f7;
+      color: inherit;
+    }
+    .video-card-cover .work-photo,
+    .video-hero-cover .work-photo {
+      filter: grayscale(.08) contrast(.98);
+    }
+    .video-play-mark {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+    }
+    .video-play-mark::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      width: 0;
+      height: 0;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-left: 13px solid #111;
+    }
+    .video-play-mark.large {
+      left: 24px;
+      bottom: 24px;
+      width: 54px;
+      height: 54px;
+    }
+    .video-play-mark.large::before {
+      left: 21px;
+      top: 16px;
+      border-top-width: 11px;
+      border-bottom-width: 11px;
+      border-left-width: 16px;
     }
     .work-card-body { padding: 22px 22px 24px; }
     .work-card h3 { font-size: 19px; }
@@ -1341,6 +1419,10 @@
         max-width: 420px;
         margin: 0 auto;
       }
+      .works-board.is-filtered {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
       .article-preview.reverse {
         margin-left: 0;
         margin-right: 0;
@@ -1528,13 +1610,133 @@
             </div>
           </a>
           <div class="work-grid">
-            <a class="work-card" href="#work-youhuayuan" data-route="work-youhuayuan" data-work-type="图文">
-              <img class="work-photo" src="assets/works/youhuayuan/cover.webp" alt="油画院 | 东五环的安静角落图片" loading="lazy">
+            <a class="work-card" href="#work-action-camera-accessory" data-route="work-action-camera-accessory" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/action-camera-accessory/cover.jpg" alt="解放双手的小配件 | 运动相机封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
               <div class="work-card-body">
-                <div class="work-kicker">小红书 · 图文</div>
-                <h3>油画院 | 东五环的安静角落</h3>
-                <p>油画院的三个大的空间</p>
-                <div class="work-tags"><span>#一分钟拍照灵感</span><span>#整点儿摄影节奏</span></div>
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>解放双手的小配件 | 运动相机</h3>
+                <p>不是广告，自用半年的小配件。</p>
+                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#运动相机拍摄</span><span>#我的休闲时光十月激励计划</span><span>#路上走走</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-art798-wall-story" data-route="work-art798-wall-story" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/art798-wall-story/cover.jpg" alt="798艺术区 | 能把故事画墙上的地方封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>798艺术区 | 能把故事画墙上的地方</h3>
+                <p>吐槽：北京公园年票里赠送的两个场馆，不来也罢~；</p>
+                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#这次旅行local一下</span><span>#秋日到站计划</span><span>#5h飞行逃离</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-universal-halloween" data-route="work-universal-halloween" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/universal-halloween/cover.jpg" alt="北环影万圣节 | 证明我胆儿小的时候到了封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>北环影万圣节 | 证明我胆儿小的时候到了</h3>
+                <p>这么大一男的还怕鬼吗？</p>
+                <div class="work-tags"><span>#万圣节</span><span>#环球影城</span><span>#假如照片有声音</span><span>#我在生活现场写作</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-jiangfu-railway" data-route="work-jiangfu-railway" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/jiangfu-railway/cover.jpg" alt="去废弃铁轨上拍个照｜将府公园封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>去废弃铁轨上拍个照｜将府公园</h3>
+                <p>蜿蜒的旧轨道🛤️，在“将府公园南园”；</p>
+                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#一分钟摄影故事</span><span>#我在生活现场写作</span><span>#生活在此处</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-dawanglu-after-work" data-route="work-dawanglu-after-work" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/dawanglu-after-work/cover.jpg" alt="如果你也在大望路上班 | 别在公司附近溜达封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>如果你也在大望路上班 | 别在公司附近溜达</h3>
+                <p>再次感谢朋友慷慨的赠送自行车。</p>
+                <div class="work-tags"><span>#我爱的城市自带BGM</span><span>#整点儿摄影节奏</span><span>#生活在此处</span><span>#摄影薯的灵感库</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-west-railway" data-route="work-west-railway" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/west-railway/cover.jpg" alt="在西五环 | 藏着一条绝美的旧铁路封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>在西五环 | 藏着一条绝美的旧铁路</h3>
+                <p>住石景山的朋友们，这条旧铁路还通车吗？</p>
+                <div class="work-tags"><span>#一分钟摄影故事</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#绿皮火车</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-hidden-view" data-route="work-hidden-view" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/hidden-view/cover.jpg" alt="一口叹气！好看的地方就是藏着不给看封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>一口叹气！好看的地方就是藏着不给看</h3>
+                <p>很早就想说看看旧铁路，</p>
+                <div class="work-tags"><span>#一分钟摄影故事</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#有一个地方只有我知道</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-universal-summary-3" data-route="work-universal-summary-3" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/universal-summary-3/cover.jpg" alt="环球影城 | 一年去二十多次的总结篇3/3封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>环球影城 | 一年去二十多次的总结篇3/3</h3>
+                <p>五大主题快速浏览</p>
+                <div class="work-tags"><span>#环球影城</span><span>#小红书创作灵感设计大赛</span><span>#旅游万粉扶持计划</span><span>#交换旅途故事</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-universal-food-2" data-route="work-universal-food-2" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/universal-food-2/cover.jpg" alt="环球影城 | 年度总结篇2/3【吃喝】封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>环球影城 | 年度总结篇2/3【吃喝】</h3>
+                <p>﻿#旅游万粉扶持计划[话题]#﻿</p>
+                <div class="work-tags"><span>#旅游万粉扶持计划</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#一分钟拍照灵感</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-universal-summary-1" data-route="work-universal-summary-1" data-work-type="视频">
+              <div class="video-card-cover">
+                <img class="work-photo" src="assets/works/universal-summary-1/cover.jpg" alt="环球影城 | 一年去二十多次的总结篇1/3封面" loading="lazy">
+                <span class="video-play-mark" aria-hidden="true"></span>
+              </div>
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 视频</div>
+                <h3>环球影城 | 一年去二十多次的总结篇1/3</h3>
+                <p>环球太大，很难几句话讲清楚</p>
+                <div class="work-tags"><span>#环球影城</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#一分钟拍照灵感</span></div>
                 <span class="ghost-btn">查看详情 →</span>
               </div>
             </a>
@@ -1544,7 +1746,7 @@
                 <div class="work-kicker">小红书 · 图文</div>
                 <h3>白塔寺 | 夜晚的北京胡同</h3>
                 <p>白塔寺的白天很热闹</p>
-                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#一分钟拍照灵感</span><span>#我的随手拍</span></div>
+                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#一分钟拍照灵感</span><span>#我的随手拍</span><span>#北京胡同</span></div>
                 <span class="ghost-btn">查看详情 →</span>
               </div>
             </a>
@@ -1555,6 +1757,16 @@
                 <h3>顺义“小镰仓”？ | 劝慎来，但有惊喜</h3>
                 <p>大阴天儿⛅</p>
                 <div class="work-tags"><span>#整点儿摄影节奏</span><span>#一分钟拍照灵感</span><span>#假如照片有声音</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-youhuayuan" data-route="work-youhuayuan" data-work-type="图文">
+              <img class="work-photo" src="assets/works/youhuayuan/cover.webp" alt="油画院 | 东五环的安静角落图片" loading="lazy">
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 图文</div>
+                <h3>油画院 | 东五环的安静角落</h3>
+                <p>油画院的三个大的空间</p>
+                <div class="work-tags"><span>#一分钟拍照灵感</span><span>#整点儿摄影节奏</span></div>
                 <span class="ghost-btn">查看详情 →</span>
               </div>
             </a>
@@ -1755,6 +1967,307 @@
         </article>
       </div>
     </section>
+
+    <section class="page" id="page-work-action-camera-accessory">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68ef9f4f000000000300e0b7?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABrzL_g0eV1RJ-1ql3tR8tJYR34Papv_18Ify4k6Ow5d0=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/action-camera-accessory/cover.jpg" alt="解放双手的小配件 | 运动相机封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>解放双手的小配件 | 运动相机</h1>
+              <p>不是广告，自用半年的小配件。</p>
+              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#运动相机拍摄</span><span>#我的休闲时光十月激励计划</span><span>#路上走走</span><span>#现在徒步正好</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68ef9f4f000000000300e0b7?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABrzL_g0eV1RJ-1ql3tR8tJYR34Papv_18Ify4k6Ow5d0=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.10.15</strong></div>
+            <div><span>视频时长</span><strong>3:14</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>不是广告，自用半年的小配件。<br>两个都挺能“吸”的，<br>一个磁吸的随身挂着的，一个带吸盘解决玻璃、桌面、瓷砖、塑料、金属等等其他材质。<br>好处是：<br>1.解放双手；<br>2.省掉三脚架；<br>3.都不沉，很小巧；#整点儿摄影节奏[话题]# #运动相机拍摄[话题]# #我的休闲时光十月激励计划[话题]# #路上走走[话题]# #现在徒步正好[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-art798-wall-story">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68d26af4000000001301e031?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABvlD_s5vmGlCKAeb1jDWNJ_g-aEvFWOU8bVjjVJhBezY=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/art798-wall-story/cover.jpg" alt="798艺术区 | 能把故事画墙上的地方封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>798艺术区 | 能把故事画墙上的地方</h1>
+              <p>吐槽：北京公园年票里赠送的两个场馆，不来也罢~；</p>
+              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#这次旅行local一下</span><span>#秋日到站计划</span><span>#5h飞行逃离</span><span>#骑了就行</span><span>#我在生活现场写作</span><span>#生活在此处</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68d26af4000000001301e031?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABvlD_s5vmGlCKAeb1jDWNJ_g-aEvFWOU8bVjjVJhBezY=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.09.23</strong></div>
+            <div><span>视频时长</span><strong>1:42</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>吐槽：北京公园年票里赠送的两个场馆，不来也罢~；<br>3D场馆子至少还能拍照，那个数字海洋馆就连个工作人员也没看着~；<br>	<br>在涂鸦楼道里，我意识到我喜欢拍照，是因为我有点幻想。<br>我总想通过一点蛛丝马迹拼凑出一个故事。<br>可能是侦探电影看多了吧。<br>	<br>798其实很适合发呆，其实画廊里没什么人，特别适合一个人静静看着、幻想着；<br>#整点儿摄影节奏[话题]# #这次旅行local一下[话题]# #秋日到站计划[话题]# #5h飞行逃离[话题]# #骑了就行[话题]# #我在生活现场写作[话题]# #生活在此处[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-universal-halloween">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68c64ad0000000001d0376ab?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABVFL4Ncpdqt1Wdqq7Ga0aawMCkIvNXq_z7P8fUO7XU-4=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/universal-halloween/cover.jpg" alt="北环影万圣节 | 证明我胆儿小的时候到了封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>北环影万圣节 | 证明我胆儿小的时候到了</h1>
+              <p>这么大一男的还怕鬼吗？</p>
+              <div class="work-tags"><span>#万圣节</span><span>#环球影城</span><span>#假如照片有声音</span><span>#我在生活现场写作</span><span>#生活在此处</span><span>#热烈闪光生活簿</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68c64ad0000000001d0376ab?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABVFL4Ncpdqt1Wdqq7Ga0aawMCkIvNXq_z7P8fUO7XU-4=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.09.14</strong></div>
+            <div><span>视频时长</span><strong>0:52</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>这么大一男的还怕鬼吗？<br>怕！！！<br>我就琢磨发明鬼屋的人，一定也是个“人菜瘾大”的TP型人格。<br>如果他看啥都不害怕，根本想不到这些吓人的方法。<br>而且小本本记下来害怕的逻辑，然后报复回去。<br>	<br>手持器材：<br>DJI action4，夜摄还是差点意思.<br>	<br>---------------------------------<br>#万圣节[话题]# #环球影城[话题]# #假如照片有声音[话题]# #我在生活现场写作[话题]# #生活在此处[话题]# #热烈闪光生活簿[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-jiangfu-railway">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68c24414000000001d018616?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABlNDoNGShhWJJWHo3KGjgZVti8D0m7PmDs5ApApcD3Ho=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/jiangfu-railway/cover.jpg" alt="去废弃铁轨上拍个照｜将府公园封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>去废弃铁轨上拍个照｜将府公园</h1>
+              <p>蜿蜒的旧轨道🛤️，在“将府公园南园”；</p>
+              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#一分钟摄影故事</span><span>#我在生活现场写作</span><span>#生活在此处</span><span>#热烈闪光生活簿</span><span>#幽默风向标</span><span>#旅游万粉扶持计划</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68c24414000000001d018616?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABlNDoNGShhWJJWHo3KGjgZVti8D0m7PmDs5ApApcD3Ho=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.09.11</strong></div>
+            <div><span>视频时长</span><strong>1:37</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>蜿蜒的旧轨道🛤️，在“将府公园南园”；<br>更舒适的路径是：从郎园station的车站大厅位置走过去；<br>白色火车🚄停置在“将府公园北园”，<br>具体位置看评论区截图吧.<br>………………<br>果然表达太重的内容，不受欢迎.<br>踏踏实实研究画面的表达，会是下一篇的方向.<br>#整点儿摄影节奏[话题]# #一分钟摄影故事[话题]# #我在生活现场写作[话题]# #生活在此处[话题]# #热烈闪光生活簿[话题]# #幽默风向标[话题]# #旅游万粉扶持计划[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-dawanglu-after-work">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68bdaf4e000000001d027d3a?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABdJoQvEL7XlGK0CFz67niMPrjyQ_w9q0kNX1SmBhJF3Y=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/dawanglu-after-work/cover.jpg" alt="如果你也在大望路上班 | 别在公司附近溜达封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>如果你也在大望路上班 | 别在公司附近溜达</h1>
+              <p>再次感谢朋友慷慨的赠送自行车。</p>
+              <div class="work-tags"><span>#我爱的城市自带BGM</span><span>#整点儿摄影节奏</span><span>#生活在此处</span><span>#摄影薯的灵感库</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68bdaf4e000000001d027d3a?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABdJoQvEL7XlGK0CFz67niMPrjyQ_w9q0kNX1SmBhJF3Y=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.09.07</strong></div>
+            <div><span>视频时长</span><strong>1:26</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>再次感谢朋友慷慨的赠送自行车。<br>虽然我知道你升级到了更好的... ...<br>公司位置在万达广场，但我只熟悉地铁站到公司楼下的路线<br>这次没有预谋的夜行，见到了很多陌生的角落<br>但是啊，最魔性的就是公司楼下的便利店<br>想进去买瓶水，一进门就浑身疲惫，太熟悉的感觉了。<br>以后没事儿啊，还得去别人上班的地方看看... ...<br>#我爱的城市自带BGM[话题]# #整点儿摄影节奏[话题]# #生活在此处[话题]# #摄影薯的灵感库[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-west-railway">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68b709ab000000001d038930?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABCfR3699VR6qkDV60tVYW-hiuPHvUcd8Zsp8IUshvrW0=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/west-railway/cover.jpg" alt="在西五环 | 藏着一条绝美的旧铁路封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>在西五环 | 藏着一条绝美的旧铁路</h1>
+              <p>住石景山的朋友们，这条旧铁路还通车吗？</p>
+              <div class="work-tags"><span>#一分钟摄影故事</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#绿皮火车</span><span>#废墟的秘密</span><span>#森林小火车</span><span>#摄影老师请回答</span><span>#摄影薯的灵感库</span><span>#交换旅途故事</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68b709ab000000001d038930?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABCfR3699VR6qkDV60tVYW-hiuPHvUcd8Zsp8IUshvrW0=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.09.03</strong></div>
+            <div><span>视频时长</span><strong>0:21</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>住石景山的朋友们，这条旧铁路还通车吗？<br>------------求个解答.<br>石景山游乐场停车时，瞥见旁边一段十分安静的铁路段；<br>悠长、阳光感、十分惊喜。<br>时间紧迫，没来得及好好拍。它是有高位俯拍的~~桥洞上有人行道。感觉这里很适合拍照~~~#一分钟摄影故事[话题]# #整点儿摄影节奏[话题]# #假如照片有声音[话题]# #绿皮火车[话题]# #废墟的秘密[话题]# #森林小火车[话题]# #摄影老师请回答[话题]# #摄影薯的灵感库[话题]# #交换旅途故事[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-hidden-view">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68aec79c000000001d02e1c6?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=AB-xPZ-dZTBOptcJjonWZD9wb5_c5zonwO7T-RRUFLfGI=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/hidden-view/cover.jpg" alt="一口叹气！好看的地方就是藏着不给看封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>一口叹气！好看的地方就是藏着不给看</h1>
+              <p>很早就想说看看旧铁路，</p>
+              <div class="work-tags"><span>#一分钟摄影故事</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#有一个地方只有我知道</span><span>#摄影老师请回答</span><span>#摄影薯的灵感库</span><span>#旅游万粉扶持计划</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68aec79c000000001d02e1c6?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=AB-xPZ-dZTBOptcJjonWZD9wb5_c5zonwO7T-RRUFLfGI=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.08.27</strong></div>
+            <div><span>视频时长</span><strong>0:23</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>很早就想说看看旧铁路，<br>既上次去了顺义“小镰仓”，确实意犹未尽。<br>这次来到东四环外的四惠东，<br>藏着一段被称为“小越南”还是“小缅甸”的楼宇间的旧铁路。<br>没成想，这里目前被严格防守，<br>不知道是不是跟近期的大秀有关。<br>	<br>只能远远的拍一张照片，<br>虽然但是，地铁上的小区外侧楼梯还是挺好看的。<br>在北京比较少见的建筑外立楼梯，<br>很酷，很有故事感的城市角落。<br>#一分钟摄影故事[话题]# #整点儿摄影节奏[话题]# #假如照片有声音[话题]# #有一个地方只有我知道[话题]# #摄影老师请回答[话题]# #摄影薯的灵感库[话题]# #旅游万粉扶持计划[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-universal-summary-3">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/689e0549000000001d034f39?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABrmm0VLb3HQ4AaXYqKPcqwTjKhacMnZbjZvmfMswgPo4=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/universal-summary-3/cover.jpg" alt="环球影城 | 一年去二十多次的总结篇3/3封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>环球影城 | 一年去二十多次的总结篇3/3</h1>
+              <p>五大主题快速浏览</p>
+              <div class="work-tags"><span>#环球影城</span><span>#小红书创作灵感设计大赛</span><span>#旅游万粉扶持计划</span><span>#交换旅途故事</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/689e0549000000001d034f39?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABrmm0VLb3HQ4AaXYqKPcqwTjKhacMnZbjZvmfMswgPo4=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.08.14</strong></div>
+            <div><span>视频时长</span><strong>3:00</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>五大主题快速浏览<br>3分钟看完北环影一年的主题秀<br>@摄影薯 @生活薯 #环球影城[话题]# ##小红书创作灵感设计大赛[话题]# #旅游万粉扶持计划[话题]# #交换旅途故事[话题]#</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-universal-food-2">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/68903ca9000000000403d551?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=AB2_Qjo_kw_9Bko0UoslQuzI6q4d3qI4nalmG6hq5F6JA=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/universal-food-2/cover.jpg" alt="环球影城 | 年度总结篇2/3【吃喝】封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>环球影城 | 年度总结篇2/3【吃喝】</h1>
+              <p>﻿#旅游万粉扶持计划[话题]#﻿</p>
+              <div class="work-tags"><span>#旅游万粉扶持计划</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#一分钟拍照灵感</span><span>#宝藏餐厅分享</span><span>#环球影城</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68903ca9000000000403d551?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=AB2_Qjo_kw_9Bko0UoslQuzI6q4d3qI4nalmG6hq5F6JA=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.08.06</strong></div>
+            <div><span>视频时长</span><strong>1:52</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>﻿#旅游万粉扶持计划[话题]#﻿<br>直接说：大部分餐厅都是烤排骨、炸鸡、薯条这种西餐味道；<br>只是喜欢吃肉，去哪家都行，都是大肉饭；<br>喜欢中餐就去功夫熊猫的【平先生面馆】，中午饭点排队较长20~30mins，下午到晚上就不排队了；<br>喜欢pizza就去变形金刚的【赛博坦】，不怎么排队；<br>喜欢汉堡就去【哈蒙德】吃大汉堡和小汉堡，中午饭点排队较长20~30mins，下午到晚上就不排队了；<br>喜欢汉堡还可以去【梅尔斯】，排队不长；<br>喜欢拍照就去哈利波特【三八扫帚】，一直排队，30~50mins比较常见，晚饭点也排；<br>--- ---<br>小吃比较推荐【煎饼】，比其他小吃管饱；<br>--- ---<br>园区不让带外酒水，建议带着“好看”，“出片儿”的水壶，哈哈，随处可接饮用水；<br>--- ---<br>﻿#整点儿摄影节奏[话题]#﻿ ﻿#假如照片有声音[话题]#﻿ ﻿#一分钟拍照灵感[话题]#﻿ ﻿#宝藏餐厅分享[话题]#﻿ ﻿#环球影城[话题]#﻿ ﻿@摄影薯﻿ ﻿@生活薯﻿</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-universal-summary-1">
+      <div class="container">
+        <article class="work-detail video-work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <a class="video-hero-cover" href="https://www.xiaohongshu.com/discovery/item/688eff950000000004002535?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABR1cldJ2Xk2DBMrhvVTD82dI5ihXcn2MtwnaAj_IufLA=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">
+              <img class="work-photo" src="assets/works/universal-summary-1/cover.jpg" alt="环球影城 | 一年去二十多次的总结篇1/3封面">
+              <span class="video-play-mark large" aria-hidden="true"></span>
+            </a>
+            <div class="detail-copy">
+              <div class="detail-kicker">小红书 · 视频 · 影像观察</div>
+              <h1>环球影城 | 一年去二十多次的总结篇1/3</h1>
+              <p>环球太大，很难几句话讲清楚</p>
+              <div class="work-tags"><span>#环球影城</span><span>#整点儿摄影节奏</span><span>#假如照片有声音</span><span>#一分钟拍照灵感</span><span>#旅游万粉扶持计划</span><span>#交换旅途故事</span></div>
+              <div class="work-actions"><a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/688eff950000000004002535?source=webshare&amp;xhsshare=pc_web&amp;xsec_token=ABR1cldJ2Xk2DBMrhvVTD82dI5ihXcn2MtwnaAj_IufLA=&amp;xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原视频 →</a></div>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>视频</strong></div>
+            <div><span>发布时间</span><strong>2025.08.03</strong></div>
+            <div><span>视频时长</span><strong>2:02</strong></div>
+          </div>
+          <div class="work-story original-note">
+            <div class="story-body"><p>环球太大，很难几句话讲清楚<br>还准备了单独一期《吃饭》和一期《季节限时主题》<br>都是体验感比较深的经历<br>------  ------<br>环球城市大道不要门票<br>安检进出也比较方便<br>所以，特别推荐大家没事也可以过去溜溜弯儿<br>尤其是规模硕大的停车楼、公交站、<br>------  ------<br>﻿#环球影城[话题]#﻿ ﻿#整点儿摄影节奏[话题]#﻿ ﻿#假如照片有声音[话题]#﻿ ﻿#一分钟拍照灵感[话题]#﻿ #<br>﻿#旅游万粉扶持计划[话题]#﻿ ﻿#交换旅途故事[话题]#﻿ ﻿@摄影薯﻿</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="page" id="page-videos">
       <div class="container">
         <div class="section-head"><h1>视频灵感</h1></div>
@@ -1906,7 +2419,7 @@
   </div>
 
   <script>
-    const routes = ["home","works","work-shougang","work-youhuayuan","work-baitasi","work-shunyi-kamakura","skills","about"];
+    const routes = ["home","works","work-action-camera-accessory","work-shougang","work-art798-wall-story","work-universal-halloween","work-jiangfu-railway","work-dawanglu-after-work","work-west-railway","work-hidden-view","work-universal-summary-3","work-universal-food-2","work-universal-summary-1","work-baitasi","work-shunyi-kamakura","work-youhuayuan","skills","about"];
     const pages = Object.fromEntries(routes.map((route) => [route, document.getElementById("page-" + route)]));
     const navLinks = Array.from(document.querySelectorAll("[data-route]"));
     const preview = document.getElementById("photo-preview");
@@ -1941,8 +2454,10 @@
     }
     function applyWorkFilter(filter) {
       const cards = Array.from(document.querySelectorAll("#page-works [data-work-type]"));
+      const worksBoard = document.querySelector("#page-works .works-board");
       cards.forEach((card) => { card.hidden = !(filter === "all" || card.dataset.workType === filter); });
       document.querySelectorAll("#page-works .filter[data-filter]").forEach((button) => button.classList.toggle("active", button.dataset.filter === filter));
+      worksBoard?.classList.toggle("is-filtered", filter !== "all");
     }
     function showCarouselControls(carouselWrap) {
       if (!carouselWrap) return;

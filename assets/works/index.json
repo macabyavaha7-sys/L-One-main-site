@@ -1,5 +1,17 @@
 [
   {
+    "id": "68ef9f4f000000000300e0b7",
+    "slug": "action-camera-accessory",
+    "title": "解放双手的小配件 | 运动相机",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-10-15",
+    "type": "视频",
+    "metadata": "assets/works/action-camera-accessory/metadata.json",
+    "cover": "assets/works/action-camera-accessory/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 194
+  },
+  {
     "id": "68d7b136000000001301e007",
     "slug": "shougang",
     "title": "首钢园｜永定河畔的微凉惬意",
@@ -11,15 +23,112 @@
     "imageCount": 18
   },
   {
-    "id": "68844865000000001502083f",
-    "slug": "youhuayuan",
-    "title": "油画院 | 东五环的安静角落",
+    "id": "68d26af4000000001301e031",
+    "slug": "art798-wall-story",
+    "title": "798艺术区 | 能把故事画墙上的地方",
     "sourcePlatform": "小红书",
-    "publishedAt": "2025-07-26",
-    "type": "图文",
-    "metadata": "assets/works/youhuayuan/metadata.json",
-    "cover": "assets/works/youhuayuan/cover.webp",
-    "imageCount": 18
+    "publishedAt": "2025-09-23",
+    "type": "视频",
+    "metadata": "assets/works/art798-wall-story/metadata.json",
+    "cover": "assets/works/art798-wall-story/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 102
+  },
+  {
+    "id": "68c64ad0000000001d0376ab",
+    "slug": "universal-halloween",
+    "title": "北环影万圣节 | 证明我胆儿小的时候到了",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-09-14",
+    "type": "视频",
+    "metadata": "assets/works/universal-halloween/metadata.json",
+    "cover": "assets/works/universal-halloween/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 52
+  },
+  {
+    "id": "68c24414000000001d018616",
+    "slug": "jiangfu-railway",
+    "title": "去废弃铁轨上拍个照｜将府公园",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-09-11",
+    "type": "视频",
+    "metadata": "assets/works/jiangfu-railway/metadata.json",
+    "cover": "assets/works/jiangfu-railway/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 97
+  },
+  {
+    "id": "68bdaf4e000000001d027d3a",
+    "slug": "dawanglu-after-work",
+    "title": "如果你也在大望路上班 | 别在公司附近溜达",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-09-07",
+    "type": "视频",
+    "metadata": "assets/works/dawanglu-after-work/metadata.json",
+    "cover": "assets/works/dawanglu-after-work/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 86
+  },
+  {
+    "id": "68b709ab000000001d038930",
+    "slug": "west-railway",
+    "title": "在西五环 | 藏着一条绝美的旧铁路",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-09-03",
+    "type": "视频",
+    "metadata": "assets/works/west-railway/metadata.json",
+    "cover": "assets/works/west-railway/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 21
+  },
+  {
+    "id": "68aec79c000000001d02e1c6",
+    "slug": "hidden-view",
+    "title": "一口叹气！好看的地方就是藏着不给看",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-08-27",
+    "type": "视频",
+    "metadata": "assets/works/hidden-view/metadata.json",
+    "cover": "assets/works/hidden-view/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 23
+  },
+  {
+    "id": "689e0549000000001d034f39",
+    "slug": "universal-summary-3",
+    "title": "环球影城 | 一年去二十多次的总结篇3/3",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-08-14",
+    "type": "视频",
+    "metadata": "assets/works/universal-summary-3/metadata.json",
+    "cover": "assets/works/universal-summary-3/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 180
+  },
+  {
+    "id": "68903ca9000000000403d551",
+    "slug": "universal-food-2",
+    "title": "环球影城 | 年度总结篇2/3【吃喝】",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-08-06",
+    "type": "视频",
+    "metadata": "assets/works/universal-food-2/metadata.json",
+    "cover": "assets/works/universal-food-2/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 112
+  },
+  {
+    "id": "688eff950000000004002535",
+    "slug": "universal-summary-1",
+    "title": "环球影城 | 一年去二十多次的总结篇1/3",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-08-03",
+    "type": "视频",
+    "metadata": "assets/works/universal-summary-1/metadata.json",
+    "cover": "assets/works/universal-summary-1/cover.jpg",
+    "imageCount": 1,
+    "durationSeconds": 122
   },
   {
     "id": "6887805d0000000017033e1c",
@@ -42,5 +151,16 @@
     "metadata": "assets/works/shunyi-kamakura/metadata.json",
     "cover": "assets/works/shunyi-kamakura/cover.webp",
     "imageCount": 13
+  },
+  {
+    "id": "68844865000000001502083f",
+    "slug": "youhuayuan",
+    "title": "油画院 | 东五环的安静角落",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-07-26",
+    "type": "图文",
+    "metadata": "assets/works/youhuayuan/metadata.json",
+    "cover": "assets/works/youhuayuan/cover.webp",
+    "imageCount": 18
   }
 ]

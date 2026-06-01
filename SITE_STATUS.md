@@ -49,6 +49,9 @@
         cover.webp
         image-01.webp ... image-08.webp
         metadata.json
+      jiangfu-railway/
+        cover.jpg
+        metadata.json
       shunyi-kamakura/
         cover.webp
         image-01.webp ... image-13.webp
@@ -66,13 +69,15 @@
 ### 已接入作品
 
 - 《首钢园｜永定河畔的微凉惬意》：`#work-shougang`，18 张图片。
+- 《去废弃铁轨上拍个照｜将府公园》：`#work-jiangfu-railway`，视频作品，站内封面 + 小红书原视频入口。
 - 《油画院 | 东五环的安静角落》：`#work-youhuayuan`，18 张图片。
 - 《白塔寺 | 夜晚的北京胡同》：`#work-baitasi`，8 张图片。
 - 《顺义“小镰仓”？ | 劝慎来，但有惊喜》：`#work-shunyi-kamakura`，13 张图片。
+- 已接入作品总数：14 条，其中图文 4 条、视频 10 条。
 
 当前作品索引：`assets/works/index.json`
 
-当前图片策略：本批作品图片仍随主站提交到 GitHub，并由 EdgeOne Pages 部署为站内静态资源。当前新增素材总量约 10.91MB，仍属于可接受的小批量上线。后续成批素材、课件、视频、ZIP、PDF 应优先放轻量服务器或 COS。
+当前图片策略：本批作品图片仍随主站提交到 GitHub，并由 EdgeOne Pages 部署为站内静态资源。视频作品只归档封面、正文和原视频入口；小红书带签名临时视频流不作为站内长期播放地址。后续成批素材、课件、视频、ZIP、PDF 应优先放轻量服务器或 COS。
 
 ## 素材仓库规划
 
@@ -127,6 +132,10 @@
 
 ## 最近变更
 
+- 2026-06-01：修复 Works 分类筛选稳定性问题：此前 `.works-board.is-filtered .work-featured` 覆盖了 `hidden` 状态，导致视频筛选页误显示首钢园图文作品；现已增加 `.works-board.is-filtered .work-featured[hidden]` / `.work-card[hidden]` 保护规则，并在 `scripts/site-audit.js` 中检查每个作品入口的 `data-work-type` 必须匹配 metadata。`TASK_GUARDRAILS.md` 新增“作品类型是硬边界”限制：视频页不得出现图文，图文页不得出现视频。
+- 2026-06-01：批量新增 9 条小红书视频作品：《一口叹气！好看的地方就是藏着不给看》《环球影城 | 年度总结篇2/3【吃喝】》《环球影城 | 一年去二十多次的总结篇1/3》《环球影城 | 一年去二十多次的总结篇3/3》《解放双手的小配件 | 运动相机》《如果你也在大望路上班 | 别在公司附近溜达》《北环影万圣节 | 证明我胆儿小的时候到了》《798艺术区 | 能把故事画墙上的地方》《在西五环 | 藏着一条绝美的旧铁路》；每条视频独立存储 metadata 和封面，接入 Works 视频分类与对应详情页。
+- 2026-06-01：新增第一条视频作品《去废弃铁轨上拍个照｜将府公园》：从小红书链接抓取标题、正文、标签、发布时间、封面和视频元数据，独立存储到 `assets/works/jiangfu-railway/metadata.json`，封面存储为 `assets/works/jiangfu-railway/cover.jpg`；Works 页面接入 `视频` 分类卡片和 `#work-jiangfu-railway` 详情页。由于小红书视频流为带签名临时 CDN 地址，当前详情页先使用站内封面 + 小红书原视频入口，不把临时视频流作为长期站内播放器。
+- 2026-06-01：调整 Works 页面分类视图层级：`全部分类` 保留主推荐作品 + 二级作品卡片结构；切换到 `图文`、`视频`、`文章` 时，作品统一降级为同级卡片网格展示，避免具体分类页继续出现一级/二级推荐关系。
 - 2026-06-01：执行上线同步流程，新增 3 篇作品与作品索引已推送到 GitHub，最新提交为 `692ad95 Add new works to main site`；GitHub 远端已验证作品路由和新增图片资源可访问，EdgeOne 预览域名暂未切换到最新部署，需要在腾讯云控制台重新部署或等待构建记录更新。
 - 2026-06-01：验证轻量服务器 IP 素材仓库逻辑，`http://62.234.73.162/health.txt` 返回 200，根目录索引返回 200，证明未来可作为 `static.l-one.asia` 的临时素材承载入口。
 - 2026-06-01：修复 Works 页面新增作品展示问题：分类筛选已接入真实 `data-filter` / `data-work-type` 交互，三篇新增作品恢复为完整信息卡片，四个作品详情页中文 UI 乱码已清理，并保留横向相册与图片预览功能。

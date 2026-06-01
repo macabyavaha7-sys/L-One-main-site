@@ -1,0 +1,31 @@
+{
+  "id": "68ef9f4f000000000300e0b7",
+  "slug": "action-camera-accessory",
+  "title": "解放双手的小配件 | 运动相机",
+  "sourcePlatform": "小红书",
+  "author": "喜大川L_One",
+  "originalUrl": "https://www.xiaohongshu.com/discovery/item/68ef9f4f000000000300e0b7?source=webshare&xhsshare=pc_web&xsec_token=ABrzL_g0eV1RJ-1ql3tR8tJYR34Papv_18Ify4k6Ow5d0=&xsec_source=pc_share",
+  "publishedAt": "2025-10-15",
+  "type": "视频",
+  "desc": "不是广告，自用半年的小配件。\n两个都挺能“吸”的，\n一个磁吸的随身挂着的，一个带吸盘解决玻璃、桌面、瓷砖、塑料、金属等等其他材质。\n好处是：\n1.解放双手；\n2.省掉三脚架；\n3.都不沉，很小巧；#整点儿摄影节奏[话题]# #运动相机拍摄[话题]# #我的休闲时光十月激励计划[话题]# #路上走走[话题]# #现在徒步正好[话题]#",
+  "tags": [
+    "整点儿摄影节奏",
+    "运动相机拍摄",
+    "我的休闲时光十月激励计划",
+    "路上走走",
+    "现在徒步正好"
+  ],
+  "cover": "assets/works/action-camera-accessory/cover.jpg",
+  "coverSourceUrl": "https://sns-webpic-qc.xhscdn.com/202606011737/59b091c7083ed3cd0b10d11d143a25d0/spectrum/1040g0k031nlm6eeqku005pmp44diu836domojrg!nd_dft_wlteh_jpg_3",
+  "video": {
+    "durationSeconds": 194,
+    "width": 960,
+    "height": 720,
+    "format": "mp4",
+    "size": 50560915,
+    "streamUrlIsTemporary": true,
+    "sourceStreamUrl": "http://sns-video-v6.xhscdn.com/stream/79/110/258/01e8ef9d8c7f47e54f03700199e8082943_258.mp4?sign=1e0b1ebdf19181b9e42121887e2f6f38&t=6a21f01c",
+    "storageStrategy": "小红书视频流为带签名临时 CDN 地址，不作为站内长期播放地址；当前使用站内封面 + 小红书原视频入口。"
+  },
+  "summary": "不是广告，自用半年的小配件。"
+}

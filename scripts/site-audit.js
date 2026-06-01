@@ -6,7 +6,10 @@ const htmlPath = path.join(root, "index.html");
 const worksIndexPath = path.join(root, "assets", "works", "index.json");
 
 const SOURCE_PLATFORM = "\u5c0f\u7ea2\u4e66";
-const WORK_TYPE_IMAGE_TEXT = "\u56fe\u6587";
+const TYPE_IMAGE_TEXT = "\u56fe\u6587";
+const TYPE_VIDEO = "\u89c6\u9891";
+const TYPE_ARTICLE = "\u6587\u7ae0";
+const ALLOWED_TYPES = new Set([TYPE_IMAGE_TEXT, TYPE_VIDEO, TYPE_ARTICLE]);
 const KICKER_SEPARATOR = "\u00b7";
 
 function read(filePath) {
@@ -37,7 +40,7 @@ function fail(message) {
 }
 
 function checkNoCorruption(label, value) {
-  if (/[?]{2,}|�/.test(value)) {
+  if (/[?]{2,}|\uFFFD|锟/.test(value)) {
     fail(`${label} contains replacement/question-mark corruption.`);
   }
 }
@@ -74,8 +77,9 @@ if (visibleHtml.includes(` ${KICKER_SEPARATOR.replace(KICKER_SEPARATOR, "?")} `)
   fail("visible index.html contains a question-mark separator between labels.");
 }
 
-if ((html.match(/class="work-card"/g) || []).length !== 3) {
-  fail("Works page should render exactly 3 secondary work cards.");
+const secondaryCards = html.match(/class="work-card"/g) || [];
+if (secondaryCards.length !== worksIndex.length - 1) {
+  fail(`Works page should render ${worksIndex.length - 1} secondary work cards, got ${secondaryCards.length}.`);
 }
 if ((html.match(/data-filter=/g) || []).length !== 4) {
   fail("Works page should render 4 filter buttons.");
@@ -86,6 +90,9 @@ if ((html.match(/work-story original-note/g) || []).length !== worksIndex.length
 const originalNoteCss = html.match(/\.work-story\.original-note \{[\s\S]*?\}/)?.[0] || "";
 if (originalNoteCss.includes("border-top") || originalNoteCss.includes("border-bottom")) {
   fail("Original note body should not use a hard horizontal divider.");
+}
+if (!html.includes(".works-board.is-filtered .work-featured[hidden]")) {
+  fail("Filtered Works layout must not override hidden featured cards.");
 }
 
 for (const work of worksIndex) {
@@ -99,21 +106,26 @@ for (const work of worksIndex) {
   if (metadata.sourcePlatform !== SOURCE_PLATFORM) {
     fail(`${work.slug} sourcePlatform should be ${SOURCE_PLATFORM}.`);
   }
-  if (metadata.type !== WORK_TYPE_IMAGE_TEXT) {
-    fail(`${work.slug} type should be ${WORK_TYPE_IMAGE_TEXT}.`);
+  if (!ALLOWED_TYPES.has(metadata.type)) {
+    fail(`${work.slug} type is not supported: ${metadata.type}.`);
   }
-  if (work.sourcePlatform !== SOURCE_PLATFORM) {
-    fail(`${work.slug} index sourcePlatform should be ${SOURCE_PLATFORM}.`);
+  if (work.sourcePlatform !== metadata.sourcePlatform) {
+    fail(`${work.slug} index sourcePlatform does not match metadata.`);
   }
-  if (work.type !== WORK_TYPE_IMAGE_TEXT) {
-    fail(`${work.slug} index type should be ${WORK_TYPE_IMAGE_TEXT}.`);
+  if (work.type !== metadata.type) {
+    fail(`${work.slug} index type does not match metadata.`);
   }
   if (String(metadata.sourcePlatform).includes("?") || String(metadata.type).includes("?")) {
     fail(`${work.slug} metadata platform/type contains question marks.`);
   }
+  const cardTypePattern = new RegExp(`data-route="work-${work.slug}"[^>]*data-work-type="${metadata.type}"`);
+  if (!cardTypePattern.test(html)) {
+    fail(`${work.slug} Works card is missing or has the wrong data-work-type.`);
+  }
 
-  if (metadata.type === WORK_TYPE_IMAGE_TEXT && desc.length < 120) {
-    fail(`${work.slug} desc is too short for an archived image-text note: ${desc.length} chars.`);
+  const minDescLength = metadata.type === TYPE_VIDEO ? 40 : 120;
+  if (desc.length < minDescLength) {
+    fail(`${work.slug} desc is too short for an archived ${metadata.type} note: ${desc.length} chars.`);
   }
 
   const sectionPattern = new RegExp(
@@ -127,10 +139,10 @@ for (const work of worksIndex) {
 
   const section = sectionMatch[1];
   checkNoCorruption(`${work.slug} rendered section`, stripNonVisibleBlocks(section));
-  if (section.includes(`${SOURCE_PLATFORM} ? ${WORK_TYPE_IMAGE_TEXT}`)) {
+  if (section.includes(`${SOURCE_PLATFORM} ? ${metadata.type}`)) {
     fail(`${work.slug} rendered kicker uses a question-mark separator.`);
   }
-  if (!section.includes(`${SOURCE_PLATFORM} ${KICKER_SEPARATOR} ${WORK_TYPE_IMAGE_TEXT}`)) {
+  if (!section.includes(`${SOURCE_PLATFORM} ${KICKER_SEPARATOR} ${metadata.type}`)) {
     fail(`${work.slug} rendered kicker is missing normalized platform/type labels.`);
   }
 
