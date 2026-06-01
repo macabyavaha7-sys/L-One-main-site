@@ -1,0 +1,1912 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L-One | 个人知识库</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --ink: #111;
+      --text: rgba(0, 0, 0, .62);
+      --muted: rgba(0, 0, 0, .45);
+      --line: rgba(0, 0, 0, .12);
+      --soft-line: rgba(0, 0, 0, .08);
+      --black: #060606;
+      --container: 884px;
+      --pad: clamp(72px, 10vw, 146px);
+      --radius: 8px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, .05);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      letter-spacing: 0;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .container {
+      max-width: calc(var(--container) + var(--pad) * 2);
+      margin: 0 auto;
+      padding-left: var(--pad);
+      padding-right: var(--pad);
+    }
+
+    .site-header {
+      padding: 24px 0 0;
+      background: #fff;
+    }
+    .header-inner {
+      display: grid;
+      grid-template-columns: 128px 1fr 200px;
+      align-items: start;
+      gap: 28px;
+      min-height: 54px;
+    }
+    .logo {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(24px, 4vw, 58px);
+      padding-top: 4px;
+    }
+    .nav-link {
+      position: relative;
+      display: grid;
+      gap: 6px;
+      text-align: center;
+      min-width: 42px;
+      padding-bottom: 11px;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .nav-link strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .nav-link span {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1;
+    }
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 23px;
+      height: 2px;
+      background: #111;
+      transform: translateX(-50%);
+    }
+    .search {
+      position: relative;
+      align-self: start;
+    }
+    .search svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      width: 17px;
+      height: 17px;
+      transform: translateY(-50%);
+      opacity: .58;
+      pointer-events: none;
+    }
+    .search input {
+      width: 100%;
+      height: 34px;
+      border: 1px solid var(--soft-line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 0 14px 0 42px;
+      outline: none;
+      color: var(--ink);
+      background: #fff;
+    }
+    .search input::placeholder { color: rgba(0, 0, 0, .36); }
+    .search input:focus { border-color: rgba(0, 0, 0, .22); }
+
+    main { min-height: calc(100vh - 92px); }
+    .page { display: none; }
+    .page.active { display: block; }
+    #page-home.awaiting-reveal .home-reveal-content {
+      opacity: 0;
+      transform: translateY(94px) scale(.975);
+      pointer-events: none;
+    }
+    #page-home.reveal-complete .home-reveal-content {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      transition: opacity .82s ease, transform .82s cubic-bezier(.2, .8, .2, 1);
+    }
+    #page-home.awaiting-reveal .hero-grid {
+      transform: translateY(0) scale(1);
+      transition: transform .72s cubic-bezier(.2, .8, .2, 1), opacity .72s ease;
+    }
+    #page-home.reveal-complete .hero-grid {
+      transform: translateY(-18px) scale(.985);
+      transition: transform .72s cubic-bezier(.2, .8, .2, 1), opacity .72s ease;
+    }
+    .scroll-trigger-note {
+      display: grid;
+      place-items: center;
+      margin: 56px auto 0;
+      color: rgba(0,0,0,.38);
+      font-size: 12px;
+      letter-spacing: 0;
+      transition: opacity .35s ease;
+    }
+    .scroll-trigger-note::after {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 36px;
+      margin-top: 14px;
+      background: rgba(0,0,0,.18);
+    }
+    #page-home.reveal-complete .scroll-trigger-note {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .section-head {
+      position: relative;
+      margin: 120px auto 87px;
+      text-align: center;
+    }
+    .section-head h1,
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(20px, 2.4vw, 29px);
+      font-weight: 500;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+    .section-head::after {
+      content: "";
+      display: block;
+      width: 54px;
+      height: 1px;
+      margin: 24px auto 0;
+      background: rgba(0, 0, 0, .5);
+    }
+    .section-head.with-action {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      text-align: center;
+    }
+    .section-head.with-action h2 { grid-column: 2; }
+    .section-head.with-action .ghost-btn {
+      grid-column: 3;
+      justify-self: end;
+      margin-top: 8px;
+    }
+    .section-head.with-action::after {
+      grid-column: 2;
+      justify-self: center;
+    }
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border: 1px solid var(--soft-line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 10px;
+      cursor: pointer;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .ghost-btn:hover { opacity: .68; transform: translateY(-1px); }
+
+    .visual {
+      position: relative;
+      overflow: hidden;
+      background: #ddd;
+      filter: grayscale(1);
+      isolation: isolate;
+    }
+    .visual::before,
+    .visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .visual::before { background: var(--scene); }
+    .visual::after {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.12)),
+        radial-gradient(circle at var(--dot-x, 50%) var(--dot-y, 55%), rgba(0,0,0,.92) 0 4px, transparent 4.5px);
+      mix-blend-mode: multiply;
+    }
+    .scene-arch {
+      --dot-x: 80%;
+      --dot-y: 55%;
+      --scene:
+        linear-gradient(126deg, #050505 0 34%, transparent 34.2%),
+        linear-gradient(74deg, transparent 0 44%, #f4f4f4 44.3% 57%, transparent 57.3%),
+        linear-gradient(146deg, transparent 0 52%, #4f4f4f 52.3% 64%, transparent 64.3%),
+        linear-gradient(162deg, transparent 0 63%, #dcdcdc 63.3% 82%, transparent 82.3%),
+        linear-gradient(110deg, #222 0 18%, #aaa 48%, #f5f5f5 100%);
+    }
+    .scene-stairs {
+      --dot-x: 58%;
+      --dot-y: 64%;
+      --scene:
+        repeating-linear-gradient(180deg, transparent 0 13px, rgba(0,0,0,.26) 13px 15px),
+        linear-gradient(105deg, #171717 0 38%, transparent 38.3%),
+        linear-gradient(72deg, transparent 0 56%, #303030 56.4% 76%, transparent 76.4%),
+        linear-gradient(180deg, #fafafa 0 20%, #bdbdbd 100%);
+    }
+    .scene-city {
+      --dot-x: 45%;
+      --dot-y: 78%;
+      --scene:
+        linear-gradient(180deg, rgba(255,255,255,.72), transparent 42%),
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(0,0,0,.18) 10px 12px),
+        linear-gradient(90deg, #262626 0 8%, #666 8% 13%, #222 13% 20%, #aaa 20% 24%, #333 24% 33%, #777 33% 44%, #202020 44% 53%, #555 53% 62%, #1d1d1d 62% 70%, #8b8b8b 70% 78%, #2c2c2c 78% 100%),
+        linear-gradient(180deg, #d7d7d7, #777);
+    }
+    .scene-notes {
+      --dot-x: 22%;
+      --dot-y: 68%;
+      --scene:
+        linear-gradient(28deg, transparent 0 51%, rgba(0,0,0,.55) 51.2% 54%, transparent 54.2%),
+        repeating-linear-gradient(0deg, transparent 0 16px, rgba(0,0,0,.12) 16px 17px),
+        linear-gradient(115deg, #dedede 0 52%, #777 52.3% 72%, #ececec 72.3% 100%);
+    }
+    .scene-room {
+      --dot-x: 50%;
+      --dot-y: 74%;
+      --scene:
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,.95) 0 18%, transparent 19%),
+        linear-gradient(90deg, #0f0f0f 0 28%, #ededed 28.3% 72%, #1b1b1b 72.3% 100%),
+        linear-gradient(180deg, #bbb 0, #222 100%);
+    }
+    .scene-desk {
+      --dot-x: 64%;
+      --dot-y: 58%;
+      --scene:
+        radial-gradient(circle at 74% 36%, rgba(255,255,255,.75) 0 9%, transparent 9.5%),
+        linear-gradient(15deg, transparent 0 54%, rgba(0,0,0,.72) 54.4% 60%, transparent 60.4%),
+        linear-gradient(95deg, #1a1a1a 0 42%, #d9d9d9 42.3% 68%, #4d4d4d 68.3% 100%);
+    }
+    .scene-book {
+      --dot-x: 47%;
+      --dot-y: 50%;
+      --scene:
+        repeating-linear-gradient(90deg, transparent 0 9px, rgba(0,0,0,.16) 9px 10px),
+        linear-gradient(110deg, #eee 0 44%, #999 44.4% 50%, #f5f5f5 50.4% 100%);
+    }
+    .scene-water {
+      --dot-x: 64%;
+      --dot-y: 54%;
+      --scene:
+        repeating-linear-gradient(0deg, rgba(0,0,0,.1) 0 1px, transparent 1px 16px),
+        linear-gradient(180deg, #f4f4f4 0, #9a9a9a 56%, #343434 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, .85fr) minmax(368px, 1.15fr);
+      gap: clamp(42px, 5vw, 74px);
+      align-items: center;
+      margin-top: 18px;
+    }
+    .hero-copy h2 {
+      margin: 0;
+      font-size: clamp(28px, 3.25vw, 43px);
+      font-weight: 400;
+      line-height: 1.1;
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+    .short-line {
+      width: 32px;
+      height: 1px;
+      background: #111;
+      margin: 28px 0 34px;
+    }
+    .hero-copy p {
+      max-width: 470px;
+      margin: 0;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 2;
+    }
+    .rank-list {
+      position: relative;
+      display: grid;
+      gap: 30px;
+      margin-top: 58px;
+      padding-left: 36px;
+    }
+    .rank-list::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      bottom: 0;
+      width: 1px;
+      background: rgba(0, 0, 0, .24);
+    }
+    .rank-list::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 9px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111;
+    }
+    .rank-item {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 22px;
+      align-items: baseline;
+    }
+    .rank-no {
+      font-size: 27px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, .75);
+    }
+    .rank-title {
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .rank-time {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .featured-card {
+      position: relative;
+      min-height: 363px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: #111;
+    }
+    .featured-card .visual {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .featured-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.35) 45%, rgba(0,0,0,.06));
+    }
+    .featured-text {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 363px;
+      padding: 39px 40px;
+      color: #fff;
+    }
+    .featured-kicker {
+      margin-bottom: 18px;
+      font-size: 11px;
+      color: rgba(255,255,255,.82);
+      text-transform: uppercase;
+    }
+    .featured-text h3 {
+      margin: 0 0 20px;
+      font-size: clamp(23px, 2.4vw, 30px);
+      font-weight: 400;
+      line-height: 1.25;
+    }
+    .featured-text p {
+      max-width: 470px;
+      margin: 0;
+      color: rgba(255,255,255,.76);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .featured-meta {
+      display: grid;
+      gap: 12px;
+      font-size: 11px;
+      color: rgba(255,255,255,.86);
+    }
+
+    .home-articles {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .article-preview {
+      display: grid;
+      grid-template-columns: 208px 1fr;
+      align-items: center;
+      gap: 66px;
+      margin: 0 0 138px;
+      color: inherit;
+      cursor: pointer;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .article-preview:hover { opacity: .82; transform: translateY(-2px); }
+    .article-preview.reverse {
+      grid-template-columns: 1fr 208px;
+      margin-left: 60px;
+      margin-right: -20px;
+    }
+    .article-preview.reverse .preview-copy {
+      text-align: right;
+      justify-self: end;
+    }
+    .preview-cover {
+      width: 208px;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .preview-cover .visual { width: 100%; height: 100%; }
+    .preview-cover .work-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(.16) contrast(.98);
+    }
+    .preview-copy h3 {
+      margin: 0 0 22px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+    .preview-copy p {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .meta {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .video-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(208px, 288px));
+      justify-content: center;
+      gap: clamp(54px, 8vw, 102px);
+      margin-bottom: 105px;
+    }
+    .video-mini .preview-cover {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+    .video-mini h3 {
+      margin: 28px 0 18px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+    .video-mini p {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .footer-line {
+      border-top: 1px solid rgba(0, 0, 0, .08);
+      margin: 60px 0 0;
+      padding: 22px 0 28px;
+      text-align: center;
+    }
+
+    .article-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+      max-width: 1010px;
+      margin: 0 auto 84px;
+    }
+    .article-column {
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--black);
+    }
+    .black-card {
+      background: var(--black);
+      color: #fff;
+    }
+    .black-card .visual {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+    .black-copy {
+      padding: 23px 22px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+    .black-copy h3 {
+      margin: 0 0 14px;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    .black-copy p {
+      margin: 0;
+      color: rgba(255, 255, 255, .66);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .black-copy .meta {
+      color: rgba(255, 255, 255, .45);
+      margin-top: 24px;
+    }
+    .category-card {
+      display: grid;
+      place-items: center;
+      min-height: 240px;
+      padding: 32px 18px;
+      text-align: center;
+      background: #030303;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+    .category-card strong {
+      display: block;
+      font-size: clamp(48px, 6vw, 78px);
+      font-weight: 400;
+      color: #fff;
+      line-height: 1;
+    }
+    .category-card span {
+      display: block;
+      margin-top: 22px;
+      color: rgba(255, 255, 255, .68);
+      font-size: 15px;
+    }
+
+    .video-layout {
+      display: grid;
+      grid-template-columns: minmax(190px, 260px) minmax(340px, 520px) minmax(190px, 260px);
+      gap: clamp(28px, 4.6vw, 54px);
+      align-items: start;
+      max-width: 1160px;
+      margin: 0 auto 90px;
+    }
+    .video-col {
+      display: grid;
+      gap: 26px;
+    }
+    .video-card {
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 7px;
+      background: #fff;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .video-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .video-card .visual {
+      width: 100%;
+      aspect-ratio: 1.1;
+    }
+    .video-card.large .visual { aspect-ratio: 1.55; }
+    .video-body {
+      padding: 20px 20px 23px;
+    }
+    .video-card.large .video-body { padding: 26px 26px 30px; }
+    .video-body h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .video-card.large h3 { font-size: 30px; }
+    .video-body p {
+      margin: 0;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .video-card.large p { font-size: 16px; }
+
+    .lib-hero {
+      margin: 82px auto 54px;
+      text-align: center;
+    }
+    .lib-hero h1 {
+      margin: 0 0 22px;
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .lib-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+    }
+    .filters {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 54px;
+      color: rgba(0, 0, 0, .68);
+      font-size: 14px;
+    }
+    .filter {
+      min-height: 34px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+    .filter.active {
+      border-color: var(--soft-line);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+    }
+    .filter.icon {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .works-intro {
+      max-width: 560px;
+      margin: -58px auto 42px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 2;
+      text-align: center;
+    }
+    .works-board {
+      display: grid;
+      gap: 32px;
+      max-width: 1040px;
+      margin: 0 auto 96px;
+    }
+    .work-featured {
+      display: grid;
+      grid-template-columns: minmax(280px, 1.08fr) minmax(280px, .92fr);
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      color: inherit;
+      cursor: pointer;
+      transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .work-featured:hover {
+      opacity: .86;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .07);
+    }
+    .work-featured .visual { min-height: 392px; }
+    .work-photo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .work-featured .work-photo {
+      min-height: 392px;
+      filter: grayscale(.18) contrast(.98);
+    }
+    .work-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(34px, 4vw, 56px);
+    }
+    .work-kicker {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .work-copy h2,
+    .work-card h3 {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 500;
+      line-height: 1.32;
+    }
+    .work-copy h2 {
+      font-size: clamp(28px, 3.2vw, 42px);
+      letter-spacing: -.02em;
+    }
+    .work-copy p,
+    .work-card p {
+      margin: 18px 0 0;
+      color: var(--text);
+      line-height: 1.85;
+    }
+    .work-copy p { font-size: 14px; }
+    .work-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      color: rgba(0, 0, 0, .52);
+      font-size: 11px;
+    }
+    .work-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 28px;
+      margin-top: 34px;
+      padding-top: 28px;
+      border-top: 1px solid var(--soft-line);
+    }
+    .work-meta-grid span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    .work-meta-grid strong {
+      display: block;
+      margin-top: 7px;
+      color: rgba(0, 0, 0, .72);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+    .work-actions { margin-top: 32px; }
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+    }
+    .work-card {
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 7px;
+      background: #fff;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .work-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .work-card .visual {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+    .work-card-body { padding: 22px 22px 24px; }
+    .work-card h3 { font-size: 19px; }
+    .work-card p { font-size: 13px; }
+    .work-card .work-tags { margin-top: 18px; }
+    .work-card .ghost-btn { margin-top: 24px; }
+    .work-detail {
+      max-width: 980px;
+      margin: 74px auto 96px;
+    }
+    .back-link {
+      display: inline-flex;
+      margin-bottom: 54px;
+      color: var(--muted);
+      font-size: 12px;
+      transition: opacity .18s ease;
+    }
+    .back-link:hover { opacity: .68; }
+    .detail-hero {
+      display: grid;
+      grid-template-columns: minmax(280px, .9fr) minmax(320px, 1.1fr);
+      gap: clamp(42px, 6vw, 82px);
+      align-items: center;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--soft-line);
+    }
+    .detail-cover {
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .detail-cover .visual {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      min-height: 420px;
+    }
+    .detail-cover .work-photo {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      min-height: 420px;
+      object-fit: cover;
+      filter: grayscale(.08) contrast(.98);
+    }
+    .detail-kicker {
+      margin-bottom: 22px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .detail-title {
+      margin: 0;
+      font-size: clamp(36px, 5vw, 68px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+    .detail-lead {
+      max-width: 560px;
+      margin: 28px 0 0;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 2;
+    }
+    .detail-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--soft-line);
+    }
+    .detail-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    .detail-meta strong {
+      display: block;
+      margin-top: 8px;
+      color: rgba(0, 0, 0, .76);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+    .detail-body {
+      display: grid;
+      grid-template-columns: minmax(0, .72fr) minmax(240px, .28fr);
+      gap: clamp(42px, 6vw, 76px);
+      padding-top: 58px;
+    }
+    .detail-section {
+      margin-bottom: 54px;
+    }
+    .detail-section h2 {
+      margin: 0 0 22px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .detail-section p {
+      margin: 0 0 16px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 2;
+    }
+    .note-body {
+      display: grid;
+      gap: 14px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 2;
+    }
+    .note-body p { margin: 0; }
+    .photo-carousel-wrap {
+      position: relative;
+    }
+    .photo-carousel {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      background: #f4f4f4;
+      scrollbar-width: none;
+    }
+    .photo-carousel::-webkit-scrollbar { display: none; }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(0, 0, 0, .1);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .84);
+      color: rgba(0, 0, 0, .76);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(-50%);
+      transition: opacity .18s ease, transform .18s ease, background .18s ease;
+    }
+    .photo-carousel-wrap:hover .carousel-btn,
+    .photo-carousel-wrap.controls-visible .carousel-btn,
+    .carousel-btn:focus-visible {
+      opacity: 1;
+    }
+    .carousel-btn:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.04);
+    }
+    .carousel-btn.prev { left: -56px; }
+    .carousel-btn.next { right: -56px; }
+    .carousel-btn span {
+      display: block;
+      margin-top: -2px;
+      font-size: 25px;
+      line-height: 1;
+    }
+    .photo-slide {
+      position: relative;
+      margin: 0;
+      scroll-snap-align: center;
+    }
+    .photo-slide .work-photo {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      min-height: 420px;
+      object-fit: cover;
+      filter: grayscale(.08) contrast(.98);
+      cursor: zoom-in;
+    }
+    .photo-index {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .82);
+      color: rgba(0, 0, 0, .68);
+      font-size: 11px;
+      line-height: 1;
+    }
+    .carousel-hint {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .photo-preview {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: clamp(18px, 4vw, 48px);
+      background: rgba(0, 0, 0, .86);
+    }
+    .photo-preview.active { display: grid; }
+    .photo-preview-img {
+      max-width: min(92vw, 1180px);
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .34);
+    }
+    .preview-close,
+    .preview-nav {
+      position: fixed;
+      z-index: 21;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease;
+    }
+    .preview-close:hover,
+    .preview-nav:hover {
+      background: rgba(255, 255, 255, .22);
+      transform: scale(1.04);
+    }
+    .preview-close {
+      top: 28px;
+      right: 30px;
+      width: 42px;
+      height: 42px;
+      font-size: 26px;
+      line-height: 1;
+    }
+    .preview-nav {
+      top: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 32px;
+      transform: translateY(-50%);
+    }
+    .preview-nav:hover { transform: translateY(-50%) scale(1.04); }
+    .preview-nav.prev { left: 30px; }
+    .preview-nav.next { right: 30px; }
+    .preview-counter {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 21;
+      transform: translateX(-50%);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .13);
+      color: rgba(255, 255, 255, .86);
+      font-size: 12px;
+    }
+    .detail-side {
+      align-self: start;
+      padding-top: 4px;
+    }
+    .detail-side-card {
+      border: 1px solid var(--soft-line);
+      border-radius: 8px;
+      padding: 24px;
+      background: #fff;
+    }
+    .detail-side-card h3 {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .detail-side-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .detail-side-card .ghost-btn {
+      margin-top: 24px;
+    }
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 34px 26px;
+      max-width: 1060px;
+      margin: 0 auto 96px;
+    }
+    .lib-card {
+      min-width: 0;
+    }
+    .lib-thumb {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease;
+    }
+    .lib-thumb .visual { width: 100%; height: 100%; }
+    .library-grid:hover .lib-thumb { transform: scale(.985); }
+    .lib-card:hover .lib-thumb { transform: scale(1.14); z-index: 2; }
+    .lib-card h3 {
+      margin: 15px 0 0;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .about-page .header-rule {
+      border-top: 1px solid var(--line);
+      margin-top: 3px;
+    }
+    .about-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      padding: 46px 0 40px;
+      border-bottom: 1px solid var(--line);
+    }
+    .info-item {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .info-item svg {
+      width: 30px;
+      height: 30px;
+      stroke-width: 1.5;
+    }
+    .eyebrow {
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .cn { color: var(--muted); font-weight: 400; }
+    .info-item p {
+      margin: 12px 0 0;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    .about-hero {
+      display: grid;
+      grid-template-columns: 1.15fr .95fr;
+      gap: 74px;
+      align-items: center;
+      padding: 42px 0 64px;
+    }
+    .about-hero h1 {
+      margin: 0;
+      font-size: clamp(78px, 10vw, 132px);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .9;
+    }
+    .about-name {
+      margin: 18px 0 42px;
+      font-size: 31px;
+      font-weight: 400;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 38px;
+      color: rgba(0, 0, 0, .72);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .tags span + span::before {
+      content: "|";
+      margin-right: 12px;
+      color: rgba(0, 0, 0, .35);
+    }
+    .about-lead {
+      color: var(--text);
+      font-size: 19px;
+      line-height: 1.95;
+    }
+    .profile-img {
+      aspect-ratio: 1.03;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .profile-img .visual { width: 100%; height: 100%; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 84px;
+      padding-bottom: 60px;
+    }
+    .resume-section {
+      margin-bottom: 48px;
+    }
+    .resume-title {
+      margin: 0 0 22px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--line);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .resume-section p {
+      margin: 0;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.85;
+    }
+    .skill-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .skill-pill {
+      min-height: 44px;
+      border: 1px solid rgba(0, 0, 0, .28);
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      padding: 7px 10px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.25;
+      color: rgba(0, 0, 0, .82);
+    }
+    .value-item {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .value-item svg { width: 24px; height: 24px; }
+    .value-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .timeline {
+      display: grid;
+      gap: 28px;
+    }
+    .job {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 28px;
+    }
+    .job time {
+      color: rgba(0, 0, 0, .72);
+      font-size: 15px;
+    }
+    .job strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .contact-list {
+      display: grid;
+      gap: 13px;
+    }
+    .contact-row {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 26px;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .contact-row strong {
+      color: rgba(0, 0, 0, .75);
+      font-weight: 500;
+    }
+    .copyright {
+      border-top: 1px solid rgba(0, 0, 0, .08);
+      padding: 20px 0 30px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .header-inner {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .nav { justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
+      .search { max-width: 320px; }
+      .hero-grid,
+      .article-preview,
+      .article-preview.reverse,
+      .video-layout,
+      .about-hero,
+      .about-grid,
+      .about-info,
+      .work-featured,
+      .detail-hero,
+      .detail-body {
+        grid-template-columns: 1fr;
+      }
+      .detail-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .work-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+      .article-preview.reverse {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .article-preview.reverse .preview-copy {
+        text-align: left;
+        justify-self: start;
+      }
+      .article-columns {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+      .library-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .video-preview-grid { grid-template-columns: minmax(240px, 360px); }
+      .skill-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .job,
+      .contact-row { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --pad: 22px; }
+      .logo { font-size: 26px; }
+      .section-head { margin-top: 58px; }
+      .section-head.with-action {
+        display: block;
+      }
+      .section-head.with-action .ghost-btn {
+        margin-top: 22px;
+      }
+      .hero-copy h2 { font-size: clamp(29px, 9vw, 40px); }
+      .rank-item { grid-template-columns: 50px 1fr; }
+      .rank-time { grid-column: 2; }
+      .featured-card,
+      .featured-text { min-height: 390px; }
+      .featured-text { padding: 34px 28px; }
+      .preview-cover { width: 100%; }
+      .article-preview,
+      .article-preview.reverse { gap: 26px; margin-bottom: 62px; }
+      .filters { justify-content: flex-start; overflow-x: auto; gap: 12px; }
+      .lib-hero h1 { font-size: 46px; }
+      .about-hero h1 { font-size: 74px; }
+      .about-lead { font-size: 16px; }
+      .detail-title { font-size: 42px; }
+      .detail-cover .visual { min-height: 320px; }
+      .photo-slide .work-photo { min-height: 320px; }
+      .carousel-btn {
+        width: 34px;
+        height: 34px;
+        opacity: 1;
+      }
+      .carousel-btn.prev { left: 10px; }
+      .carousel-btn.next { right: 10px; }
+      .preview-close {
+        top: 16px;
+        right: 16px;
+      }
+      .preview-nav {
+        width: 40px;
+        height: 40px;
+      }
+      .preview-nav.prev { left: 16px; }
+      .preview-nav.next { right: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="logo" href="#home" data-route="home">L-One</a>
+      <nav class="nav" aria-label="主导航">
+        <a class="nav-link" href="#home" data-route="home"><strong>Recent</strong><span>最近</span></a>
+        <a class="nav-link" href="#works" data-route="works"><strong>Works</strong><span>作品</span></a>
+        <a class="nav-link" href="#skills" data-route="skills"><strong>Skills</strong><span>技能库</span></a>
+        <a class="nav-link" href="#about" data-route="about"><strong>About</strong><span>L-One</span></a>
+      </nav>
+      <label class="search" aria-label="搜索知识库">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="search" placeholder="搜索知识库">
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="page" id="page-home">
+      <div class="container">
+        <div class="section-head"><h1>近期灵感</h1></div>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <h2>AI 视频为什么难做长</h2>
+            <div class="short-line"></div>
+            <p>从模型能力、内容结构到用户心理，拆解 AI 视频创作的实用挑战，以及破局的关键路径。</p>
+            <div class="rank-list">
+              <div class="rank-item"><span class="rank-no">01</span><span class="rank-title">AI视频为什么难做长</span><span class="rank-time">2 小时前</span></div>
+              <div class="rank-item"><span class="rank-no">02</span><span class="rank-title">重庆城市观察</span><span class="rank-time">1 天前</span></div>
+              <div class="rank-item"><span class="rank-no">03</span><span class="rank-title">网站工作流搭建</span><span class="rank-time">3 天前</span></div>
+            </div>
+          </div>
+          <article class="featured-card">
+            <div class="visual scene-arch"></div>
+            <div class="featured-text">
+              <div>
+                <div class="featured-kicker">Featured</div>
+                <h3>AI 视频为什么难做长</h3>
+                <p>从模型能力、内容结构到用户心理，拆解 AI 视频创作的实用挑战，以及破局的关键路径。</p>
+              </div>
+              <div class="featured-meta">
+                <span>老王 · 2 小时前</span>
+                <span>阅读 3.2k · 收藏 612</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="scroll-trigger-note">向下滚动展开下一层内容</div>
+
+        <div class="home-reveal-content" id="home-reveal-content">
+          <div class="section-head with-action"><h2>近期作品</h2><a class="ghost-btn" href="#works" data-route="works">进入作品页</a></div>
+          <div class="home-articles">
+            <a class="article-preview" href="#work-shougang" data-route="work-shougang">
+              <div class="preview-cover"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/02d02dd94c287e9896f2bdd44825c251/spectrum/1040g34o31muhui5nks105pmp44diu8368v386o8!nd_dft_wlteh_webp_3" alt="首钢园｜永定河畔的微凉惬意封面" loading="lazy"></div>
+              <div class="preview-copy">
+                <h3>首钢园｜永定河畔的微凉惬意</h3>
+                <p>永定河水很湍急，声音很大，傍晚的风带着秋天的凉劲儿，躺在草坪上，听水，乘风，真的很舒服。</p>
+                <div class="meta">小红书 · 图文 · 2025.09.27</div>
+              </div>
+            </a>
+            <article class="article-preview reverse">
+              <div class="preview-copy">
+                <h3>重庆城市观察</h3>
+                <p>在山城的坡道与烟火之间，记录城市的节奏与人们的日常选择。</p>
+                <div class="meta">L-One 老王 · 1 天前 · 阅读 2.1k · 收藏 438</div>
+              </div>
+              <div class="preview-cover"><div class="visual scene-city"></div></div>
+            </article>
+            <article class="article-preview">
+              <div class="preview-cover"><div class="visual scene-notes"></div></div>
+              <div class="preview-copy">
+                <h3>网站工作流搭建</h3>
+                <p>从内容规划、资产管理到发布协作，梳理一套可复用的网站搭建与运营流程。</p>
+                <div class="meta">L-One 老王 · 3 天前 · 阅读 1.8k · 收藏 376</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="section-head with-action"><h2>视频作品</h2><a class="ghost-btn" href="#works" data-route="works">进入作品页</a></div>
+          <div class="video-preview-grid">
+            <article class="video-mini">
+              <div class="preview-cover"><div class="visual scene-room"></div></div>
+              <h3>AI 内容创作方法论</h3>
+              <p>从灵感到成片，拆解 AI 视频从构思到落地的完整流程。</p>
+              <div class="meta">12 分钟 · 1080p · 中文字幕</div>
+            </article>
+            <article class="video-mini">
+              <div class="preview-cover"><div class="visual scene-city"></div></div>
+              <h3>城市空间与人的关系</h3>
+              <p>在城市影像中，观察空间如何塑造情绪与故事。</p>
+              <div class="meta">14 分钟 · 4K · 中文字幕</div>
+            </article>
+          </div>
+          <footer class="footer-line"><button class="ghost-btn" type="button" data-top>回到顶部</button></footer>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-works">
+      <div class="container">
+        <div class="section-head"><h1>作品归档</h1></div>
+        <p class="works-intro">把分散在不同平台上的图文、视频和文章整理成统一的 L-One 阅读入口。平台渠道只作为作品标签存在，作品本身在这里保持同一种版式。</p>
+        <div class="filters">
+          <button class="filter active" type="button">全部分类</button>
+          <button class="filter" type="button">图文</button>
+          <button class="filter" type="button">视频</button>
+          <button class="filter" type="button">文章</button>
+        </div>
+        <div class="works-board">
+          <a class="work-featured" href="#work-shougang" data-route="work-shougang">
+            <img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/02d02dd94c287e9896f2bdd44825c251/spectrum/1040g34o31muhui5nks105pmp44diu8368v386o8!nd_dft_wlteh_webp_3" alt="首钢园｜永定河畔的微凉惬意封面" loading="lazy">
+            <div class="work-copy">
+              <div class="work-kicker">Xiaohongshu · 图文 · 城市观察</div>
+              <h2>首钢园｜永定河畔的微凉惬意</h2>
+              <p>永定河水很湍急，声音很大，傍晚的风带着秋天的凉劲儿，躺在草坪上，听水，乘风，真的很舒服。</p>
+              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#城市漫游者</span><span>#首钢园</span><span>#我的秋日画册</span></div>
+              <div class="work-meta-grid">
+                <div><span>来源平台</span><strong>小红书</strong></div>
+                <div><span>作品类型</span><strong>图文</strong></div>
+                <div><span>发布时间</span><strong>2025.09.27</strong></div>
+                <div><span>图片数量</span><strong>18 张</strong></div>
+              </div>
+              <div class="work-actions"><span class="ghost-btn">查看详情 →</span></div>
+            </div>
+          </a>
+          <div class="work-grid">
+            <article class="work-card">
+              <div class="visual scene-city"></div>
+              <div class="work-card-body">
+                <div class="work-kicker">Xiaohongshu · 视频</div>
+                <h3>去废弃铁轨上拍个照｜将府公园</h3>
+                <p>视频笔记入口示例，保留视频封面、内容摘要与原平台跳转。</p>
+                <div class="work-tags"><span>#小红书</span><span>#视频笔记</span><span>#拍照</span></div>
+                <a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68c24414000000001d018616" target="_blank" rel="noopener noreferrer">查看视频 →</a>
+              </div>
+            </article>
+            <article class="work-card">
+              <div class="visual scene-notes"></div>
+              <div class="work-card-body">
+                <div class="work-kicker">Article · 文章</div>
+                <h3>一篇内容如何整理成知识卡片</h3>
+                <p>文章类作品入口示例，用同一套字段承载长文、公众号或站内整理稿。</p>
+                <div class="work-tags"><span>#文章</span><span>#知识整理</span><span>#工作流</span></div>
+                <a class="ghost-btn" href="#" data-route="works">阅读摘要 →</a>
+              </div>
+            </article>
+            <article class="work-card">
+              <div class="visual scene-arch"></div>
+              <div class="work-card-body">
+                <div class="work-kicker">Video · 视频</div>
+                <h3>城市空间与人的关系</h3>
+                <p>视频类作品入口示例，统一展示摘要、封面、标签和外链入口。</p>
+                <div class="work-tags"><span>#视频</span><span>#城市观察</span><span>#空间</span></div>
+                <a class="ghost-btn" href="#" data-route="works">查看作品 →</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-work-shougang">
+      <div class="container">
+        <article class="work-detail">
+          <a class="back-link" href="#works" data-route="works">← 返回作品归档</a>
+          <div class="detail-hero">
+            <div>
+              <div class="photo-carousel-wrap">
+                <button class="carousel-btn prev" type="button" data-carousel-action="prev" aria-label="上一张图片"><span>&lsaquo;</span></button>
+                <div class="photo-carousel" aria-label="首钢园图文图片，可左右滑动查看">
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/02d02dd94c287e9896f2bdd44825c251/spectrum/1040g34o31muhui5nks105pmp44diu8368v386o8!nd_dft_wlteh_webp_3" alt="首钢园图文图片 1"><figcaption class="photo-index">1 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/4d58147eda76aee6852d74d380178203/1040g00831mua64js5m105pmp44diu83613r2d28!nd_dft_wlteh_webp_3" alt="首钢园图文图片 2" loading="lazy"><figcaption class="photo-index">2 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/bed55f8b69c5cd1d8b69b5f4638f8907/1040g00831mua64js5m1g5pmp44diu836gfnlr58!nd_dft_wlteh_webp_3" alt="首钢园图文图片 3" loading="lazy"><figcaption class="photo-index">3 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/029fb6ced786ea0d5e1065ced9b21228/1040g00831mua64js5m4g5pmp44diu836re9m208!nd_dft_wgth_webp_3" alt="首钢园图文图片 4" loading="lazy"><figcaption class="photo-index">4 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/890939136325f35111cec1084d2fe696/1040g00831mua64js5m305pmp44diu836njgpop0!nd_dft_wlteh_webp_3" alt="首钢园图文图片 5" loading="lazy"><figcaption class="photo-index">5 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/7046f2797b0465cac19fb990de86d862/1040g00831mua64js5m405pmp44diu836fjvfcho!nd_dft_wlteh_webp_3" alt="首钢园图文图片 6" loading="lazy"><figcaption class="photo-index">6 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/46c33321369ebb3845aaa946d0626acd/1040g00831mua64js5m505pmp44diu8361lss2ag!nd_dft_wlteh_webp_3" alt="首钢园图文图片 7" loading="lazy"><figcaption class="photo-index">7 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/1fd3bc5a645bbc947cce853299e4e336/spectrum/1040g34o31mui0hnhl22g5pmp44diu836e5p5on0!nd_dft_wlteh_webp_3" alt="首钢园图文图片 8" loading="lazy"><figcaption class="photo-index">8 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/0bb3aaea5d092c7a42f1fde296288987/spectrum/1040g34o31mui0hnhl2205pmp44diu836ueufseo!nd_dft_wgth_webp_3" alt="首钢园图文图片 9" loading="lazy"><figcaption class="photo-index">9 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/a00e0035429723cb26a7da4a79391787/spectrum/1040g34o31muhvr2bl2105pmp44diu836putcreo!nd_dft_wlteh_webp_3" alt="首钢园图文图片 10" loading="lazy"><figcaption class="photo-index">10 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/b091af236f73d5116d0acbcdfc51ddc4/1040g00831mua64js5m5g5pmp44diu836dvjqsqg!nd_dft_wgth_webp_3" alt="首钢园图文图片 11" loading="lazy"><figcaption class="photo-index">11 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/7dc0796ab0ab84aaf2f63f2268605772/1040g00831mua64js5m605pmp44diu83699c0l3o!nd_dft_wlteh_webp_3" alt="首钢园图文图片 12" loading="lazy"><figcaption class="photo-index">12 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/a71eeeeeedadc345c56a45dbee3e2dac/1040g2sg31muaj0bamge05pmp44diu8360eo1olg!nd_dft_wgth_webp_3" alt="首钢园图文图片 13" loading="lazy"><figcaption class="photo-index">13 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/a58f0b4ae3e0126eab1bbae02ede6b59/1040g2sg31muaj0bamgf05pmp44diu8360ccaipg!nd_dft_wgth_webp_3" alt="首钢园图文图片 14" loading="lazy"><figcaption class="photo-index">14 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/86dc3add53a0bb902b4560a84224ac8b/1040g2sg31muaj0bamgeg5pmp44diu836bek8vl0!nd_dft_wgth_webp_3" alt="首钢园图文图片 15" loading="lazy"><figcaption class="photo-index">15 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/a1df035cdfc670ad08447428d4e225d0/1040g00831mua64js5m6g5pmp44diu8367ort9kg!nd_dft_wgth_webp_3" alt="首钢园图文图片 16" loading="lazy"><figcaption class="photo-index">16 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/8862e229456ad86effcf7c40828dfee9/1040g2sg31muaj0bamgfg5pmp44diu836k3nbihg!nd_dft_wgth_webp_3" alt="首钢园图文图片 17" loading="lazy"><figcaption class="photo-index">17 / 18</figcaption></figure>
+                  <figure class="photo-slide"><img class="work-photo" src="https://sns-webpic-qc.xhscdn.com/202605312227/de86bfb1eebc88d25160ac90267b05b4/spectrum/1040g34o31mui39bukq105pmp44diu836co86atg!nd_dft_wgth_webp_3" alt="首钢园图文图片 18" loading="lazy"><figcaption class="photo-index">18 / 18</figcaption></figure>
+                </div>
+                <button class="carousel-btn next" type="button" data-carousel-action="next" aria-label="下一张图片"><span>&rsaquo;</span></button>
+              </div>
+              <div class="carousel-hint">点击左右按钮，或左右滑动查看图片</div>
+            </div>
+            <div>
+              <div class="detail-kicker">Xiaohongshu · 图文 · 城市观察</div>
+              <h1 class="detail-title">首钢园｜永定河畔的微凉惬意</h1>
+              <p class="detail-lead">永定河水很湍急，声音很大，傍晚的风带着秋天的凉劲儿，躺在草坪上，听水，乘风，真的很舒服。</p>
+              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#城市漫游者</span><span>#旅游编辑部</span><span>#首钢园</span><span>#我的秋日画册</span></div>
+            </div>
+          </div>
+
+          <div class="detail-meta">
+            <div><span>来源平台</span><strong>小红书</strong></div>
+            <div><span>作品类型</span><strong>图文</strong></div>
+            <div><span>发布时间</span><strong>2025.09.27</strong></div>
+            <div><span>图片数量</span><strong>18 张</strong></div>
+          </div>
+
+          <div class="detail-body">
+            <div>
+              <section class="detail-section">
+                <h2>原文内容</h2>
+                <div class="note-body">
+                  <p>永定河水很湍急，声音很大，<br>傍晚的风带着秋天的凉劲儿，<br>躺在草坪上，听水，乘风，真的很舒服.</p>
+                  <p>首钢很大，也不大，绕着“群明湖”，每个点都不会错过<br>湖东侧：皮爷咖啡<br>湖东南侧：麦当劳<br>湖西侧：大跳台、WTT大满贯会场；<br>湖西北侧：永定河集；<br>湖北侧：六工汇、WTT冰球馆；</p>
+                  <p>P1是我发现的惊喜，在永定河集的雕塑内部，<br>P2觉得首钢大桥上太热闹，I 人属性驱使我退到桥下，没想到仰拍大桥也挺不错的；<br>面馆的面条🍜有点硬，可以告知厨房多煮软一点儿；<br>熏鱼和大肉丸子意外的味道还不错…</p>
+                  <p>集市里有一家包店很有调调，后来发现其实它的老板丞相我关注了很久…</p>
+                  <p>#整点儿摄影节奏[话题]# #城市漫游者[话题]# #旅游编辑部[话题]# @户外薯 @摄影薯 @生活薯 #首钢园[话题]# #wtt北京大满贯[话题]##我的秋日画册[话题]# #这次旅行local一下[话题]# #秋日到站计划[话题]# #骑了就行[话题]#</p>
+                </div>
+              </section>
+            </div>
+
+            <aside class="detail-side">
+              <div class="detail-side-card">
+                <h3>原始内容入口</h3>
+                <p>本站已完成内容本体归档：标题、正文、封面和 18 张图片均来自原始笔记链接。互动数据、评论和平台上下文仍以小红书原文为准。</p>
+                <a class="ghost-btn" href="https://www.xiaohongshu.com/discovery/item/68d7b136000000001301e007?source=webshare&xhsshare=pc_web&xsec_token=ABxBSyZFupP3ifzMZRNJsKEJsB3HA-Im6mK8OZIZjOWFE=&xsec_source=pc_share" target="_blank" rel="noopener noreferrer">打开小红书原文 →</a>
+              </div>
+            </aside>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-videos">
+      <div class="container">
+        <div class="section-head"><h1>视频灵感</h1></div>
+        <div class="video-layout">
+          <div class="video-col">
+            <article class="video-card"><div class="visual scene-arch"></div><div class="video-body"><h3>光影与结构的对话</h3><p>探索建筑中光影如何塑造空间情绪。</p><div class="meta">08:24 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-city"></div><div class="video-body"><h3>城市的节奏</h3><p>在快与慢之间，寻找城市的呼吸。</p><div class="meta">06:18 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-desk"></div><div class="video-body"><h3>高效工作的环境设计</h3><p>打造专注与舒适并存的空间。</p><div class="meta">05:40 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-room"></div><div class="video-body"><h3>创作者的日常</h3><p>记录灵感背后的生活片段。</p><div class="meta">07:36 · 1080P</div></div></article>
+          </div>
+          <div class="video-col">
+            <article class="video-card large"><div class="visual scene-stairs"></div><div class="video-body"><h3>建筑的力量</h3><p>穿越建筑，理解空间如何影响我们的感受与行为。</p><div class="meta">14:36 · 4K</div></div></article>
+            <article class="video-card large"><div class="visual scene-city"></div><div class="video-body"><h3>城市观察：雾中之城</h3><p>一次关于城市、时间与人文的静默记录。</p><div class="meta">16:08 · 4K</div></div></article>
+            <article class="video-card large"><div class="visual scene-desk"></div><div class="video-body"><h3>极简工作流</h3><p>从工具到思维，建立可持续的创作流程。</p><div class="meta">11:22 · 1080P</div></div></article>
+          </div>
+          <div class="video-col">
+            <article class="video-card"><div class="visual scene-city"></div><div class="video-body"><h3>一个人的城市漫步</h3><p>在陌生与熟悉之间，发现日常之美。</p><div class="meta">04:52 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-arch"></div><div class="video-body"><h3>空间的留白</h3><p>留白不是空，而是一种表达。</p><div class="meta">06:55 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-notes"></div><div class="video-body"><h3>设计思维的过程</h3><p>从观察到原型，设计如何解决问题。</p><div class="meta">10:12 · 1080P</div></div></article>
+            <article class="video-card"><div class="visual scene-water"></div><div class="video-body"><h3>远方的生活</h3><p>离开熟悉的地方，去建造新的可能。</p><div class="meta">12:03 · 1080P</div></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-skills">
+      <div class="container">
+        <div class="lib-hero">
+          <h1>L-One Skills</h1>
+          <p>把好用的工作流、提示词和能力模块整理成可复用的技能库。</p>
+        </div>
+        <div class="filters">
+          <button class="filter active" type="button">全部分类</button>
+          <button class="filter" type="button">内容创作</button>
+          <button class="filter" type="button">视觉设计</button>
+          <button class="filter" type="button">AI 工作流</button>
+          <button class="filter icon" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h16l-6 7v5l-4 2v-7z"></path></svg>筛选</button>
+        </div>
+        <div class="library-grid">
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-stairs"></div></div><h3>城市的留白时刻</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-book"></div></div><h3>写作思考方法论</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-desk"></div></div><h3>个人官网搭建指南</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-book"></div></div><h3>好文章是改出来的</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-room"></div></div><h3>内容结构化方法</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-city"></div></div><h3>长期主义者的工作流</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-desk"></div></div><h3>高效专注的工作环境</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-book"></div></div><h3>如何有效阅读一本书</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-room"></div></div><h3>创作者的设备清单</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-water"></div></div><h3>审美提升的日常练习</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-notes"></div></div><h3>设计思维入门</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-notes"></div></div><h3>灵感收集系统</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-arch"></div></div><h3>极简主义与生活</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-notes"></div></div><h3>每日复盘模板</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-book"></div></div><h3>推荐书单合集</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-room"></div></div><h3>Web 开发基础速查</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-desk"></div></div><h3>数据可视化基础</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-room"></div></div><h3>深度学习资源导航</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-water"></div></div><h3>心理学入门笔记</h3></article>
+          <article class="lib-card"><div class="lib-thumb"><div class="visual scene-city"></div></div><h3>演讲与表达技巧</h3></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page about-page" id="page-about">
+      <div class="container">
+        <div class="header-rule"></div>
+        <div class="about-info">
+          <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.7-4 4.4-6 8-6s6.3 2 8 6"></path></svg><div><div class="eyebrow">AUTHOR <span class="cn">/ 作者</span></div><p>老王<br><span class="cn">内容创作者</span></p></div></div>
+          <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg><div><div class="eyebrow">EMAIL <span class="cn">/ 邮箱</span></div><p>hello@l-one.asia</p></div></div>
+          <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s7-5.2 7-12a7 7 0 0 0-14 0c0 6.8 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><div><div class="eyebrow">CITY <span class="cn">/ 城市</span></div><p>中国 · 杭州</p></div></div>
+        </div>
+        <div class="about-hero">
+          <div>
+            <h1>L-ONE</h1>
+            <div class="about-name">老王</div>
+            <div class="tags">
+              <span>Content Creator / 内容创作者</span>
+              <span>Knowledge Curator / 知识整理者</span>
+              <span>AI Practitioner / AI 工作流实践者</span>
+            </div>
+            <div class="about-lead">I capture thoughts, organize knowledge, and build systems.<br>I connect more people through valuable content,<br>inspiring action and sparking change.</div>
+          </div>
+          <div class="profile-img"><div class="visual scene-room"></div></div>
+        </div>
+        <div class="about-grid">
+          <div>
+            <section class="resume-section">
+              <h2 class="resume-title">PROFILE <span class="cn">/ 个人简介</span></h2>
+              <p>I specialize in content creation and knowledge management,<br>integrating complex information into clear, actionable systems<br>to help more people learn and grow.</p>
+            </section>
+            <section class="resume-section">
+              <h2 class="resume-title">SKILLS <span class="cn">/ 技能卡片清单</span></h2>
+              <div class="skill-list">
+                <div class="skill-pill">Content Strategy<br><span class="cn">内容策划</span></div>
+                <div class="skill-pill">Writing & Editing<br><span class="cn">写作编辑</span></div>
+                <div class="skill-pill">Knowledge Mgmt<br><span class="cn">知识整理</span></div>
+                <div class="skill-pill">Video Editing<br><span class="cn">视频剪辑</span></div>
+                <div class="skill-pill">Photography<br><span class="cn">摄影</span></div>
+                <div class="skill-pill">Visual Design<br><span class="cn">视觉审美</span></div>
+                <div class="skill-pill">AI Workflows<br><span class="cn">AI 工作流</span></div>
+                <div class="skill-pill">Web Strategy<br><span class="cn">网站策划</span></div>
+                <div class="skill-pill">Data Analysis<br><span class="cn">数据分析</span></div>
+              </div>
+            </section>
+            <section class="resume-section">
+              <h2 class="resume-title">VALUES <span class="cn">/ 价值观</span></h2>
+              <div class="value-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle><path d="M12 8v4l3 2"></path></svg><div><strong>Share with Authenticity / 真诚分享</strong><p>Share true experience, not please everyone.<br>分享真实经验，不制造焦虑。</p></div></div>
+              <div class="value-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m12 3 8 4-8 4-8-4z"></path><path d="m4 12 8 4 8-4"></path><path d="m4 17 8 4 8-4"></path></svg><div><strong>Keep Improving / 持续精进</strong><p>Stay curious, keep learning, and iterate.<br>保持学习，迭代思维与能力。</p></div></div>
+              <div class="value-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 19c0-3 2-5 4-5s4 2 4 5"></path><circle cx="12" cy="8" r="3"></circle><path d="M4 19c0-2 1.5-4 3.5-4"></path><path d="M20 19c0-2-1.5-4-3.5-4"></path></svg><div><strong>Create Impact / 利他共赢</strong><p>Create value and grow together.<br>创造价值，成就彼此成长。</p></div></div>
+            </section>
+          </div>
+          <div>
+            <section class="resume-section">
+              <h2 class="resume-title">EXPERIENCE <span class="cn">/ 工作履历</span></h2>
+              <div class="timeline">
+                <div class="job"><time>2021 – Present</time><div><strong>Independent Content Creator / 独立内容创作者</strong><p>Focus on content strategy and workflow optimization<br>专注知识分享与系统化内容创作</p></div></div>
+                <div class="job"><time>2019 – 2021</time><div><strong>Content Planner / 内容策划</strong><p>Responsible for content planning, curation and execution<br>负责内容选题、策划与执行</p></div></div>
+                <div class="job"><time>2016 – 2019</time><div><strong>Director / 导演 / 编导</strong><p>Video content creation and project management<br>视频内容创作与团队项目管理</p></div></div>
+                <div class="job"><time>2013 – 2016</time><div><strong>Video Editor / 影视制作助理</strong><p>Footage editing and post-production<br>参与拍摄与后期制作</p></div></div>
+              </div>
+            </section>
+            <section class="resume-section">
+              <h2 class="resume-title">CONTACT <span class="cn">/ 联系方式</span></h2>
+              <div class="contact-list">
+                <div class="contact-row"><strong>Email / 邮箱</strong><span>hello@l-one.asia</span></div>
+                <div class="contact-row"><strong>Phone / 电话</strong><span>+86 138 0000 0000</span></div>
+                <div class="contact-row"><strong>Website / 个人网站</strong><span>https://l-one.asia</span></div>
+                <div class="contact-row"><strong>Collaboration / 合作方式</strong><span>Content Collaboration / 内容合作<br>Course Consulting / 课程咨询<br>Project Planning / 项目共创</span></div>
+              </div>
+            </section>
+            <section class="resume-section">
+              <h2 class="resume-title">VISION <span class="cn">/ 愿景</span></h2>
+              <p>Help more people build knowledge into action,<br>enabling a life of freedom, meaning, and impact.</p>
+              <p style="margin-top: 14px;">成为连接知识与行动的桥梁，<br>帮助更多人用系统方法，实现自由而有意义的生活。</p>
+            </section>
+          </div>
+        </div>
+        <div class="copyright">© 2024 L-One. All rights reserved.</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="photo-preview" id="photo-preview" aria-hidden="true">
+    <button class="preview-close" type="button" data-preview-action="close" aria-label="关闭图片预览">&times;</button>
+    <button class="preview-nav prev" type="button" data-preview-action="prev" aria-label="上一张图片">&lsaquo;</button>
+    <img class="photo-preview-img" src="" alt="">
+    <button class="preview-nav next" type="button" data-preview-action="next" aria-label="下一张图片">&rsaquo;</button>
+    <div class="preview-counter" id="preview-counter">1 / 18</div>
+  </div>
+
+  <script>
+    const routes = ["home", "works", "work-shougang", "skills", "about"];
+    const pages = Object.fromEntries(routes.map((route) => [route, document.getElementById(`page-${route}`)]));
+    const navLinks = Array.from(document.querySelectorAll("[data-route]"));
+    const carousel = document.querySelector(".photo-carousel");
+    const carouselWrap = document.querySelector(".photo-carousel-wrap");
+    const preview = document.getElementById("photo-preview");
+    const previewImg = preview?.querySelector(".photo-preview-img");
+    const previewCounter = document.getElementById("preview-counter");
+    const previewImages = Array.from(document.querySelectorAll(".photo-slide .work-photo"));
+    let homeRevealDone = false;
+    let revealTimer = 0;
+    let carouselControlsTimer = 0;
+    let previewIndex = 0;
+
+    function updateHomeRevealState(route) {
+      const home = pages.home;
+      home.classList.toggle("awaiting-reveal", route === "home" && !homeRevealDone);
+      home.classList.toggle("reveal-complete", route === "home" && homeRevealDone);
+    }
+
+    function triggerHomeReveal() {
+      if (homeRevealDone || !pages.home.classList.contains("active")) return;
+      homeRevealDone = true;
+      updateHomeRevealState("home");
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(() => {
+        document.getElementById("home-reveal-content").scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 520);
+    }
+
+    function setRoute(rawRoute) {
+      const route = routes.includes(rawRoute) ? rawRoute : "home";
+      routes.forEach((name) => pages[name].classList.toggle("active", name === route));
+      const activeRoute = route.startsWith("work-") ? "works" : route;
+      navLinks.forEach((link) => link.classList.toggle("active", link.dataset.route === activeRoute));
+      updateHomeRevealState(route);
+      document.title = route === "home" ? "L-One | 个人知识库" : `L-One | ${route}`;
+      window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    }
+
+    function showCarouselControls() {
+      if (!carouselWrap) return;
+      carouselWrap.classList.add("controls-visible");
+      clearTimeout(carouselControlsTimer);
+      carouselControlsTimer = setTimeout(() => {
+        carouselWrap.classList.remove("controls-visible");
+      }, 2000);
+    }
+
+    function scrollCarousel(direction) {
+      if (!carousel) return;
+      carousel.scrollBy({ left: direction * carousel.clientWidth, behavior: "smooth" });
+      showCarouselControls();
+    }
+
+    function setPreview(index) {
+      if (!previewImg || previewImages.length === 0) return;
+      previewIndex = (index + previewImages.length) % previewImages.length;
+      const image = previewImages[previewIndex];
+      previewImg.src = image.currentSrc || image.src;
+      previewImg.alt = image.alt;
+      if (previewCounter) previewCounter.textContent = `${previewIndex + 1} / ${previewImages.length}`;
+    }
+
+    function openPreview(index) {
+      if (!preview) return;
+      setPreview(index);
+      preview.classList.add("active");
+      preview.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closePreview() {
+      if (!preview) return;
+      preview.classList.remove("active");
+      preview.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function stepPreview(direction) {
+      if (!preview?.classList.contains("active")) return;
+      setPreview(previewIndex + direction);
+    }
+
+    carouselWrap?.addEventListener("pointermove", showCarouselControls);
+    carouselWrap?.addEventListener("pointerenter", showCarouselControls);
+
+    window.addEventListener("hashchange", () => setRoute(location.hash.replace("#", "")));
+    document.addEventListener("click", (event) => {
+      const carouselButton = event.target.closest("[data-carousel-action]");
+      if (carouselButton) {
+        scrollCarousel(carouselButton.dataset.carouselAction === "next" ? 1 : -1);
+        return;
+      }
+      const previewAction = event.target.closest("[data-preview-action]")?.dataset.previewAction;
+      if (previewAction) {
+        if (previewAction === "close") closePreview();
+        if (previewAction === "prev") stepPreview(-1);
+        if (previewAction === "next") stepPreview(1);
+        return;
+      }
+      if (event.target === preview) closePreview();
+      const carouselImage = event.target.closest(".photo-slide .work-photo");
+      if (carouselImage) {
+        openPreview(previewImages.indexOf(carouselImage));
+        return;
+      }
+      const routeLink = event.target.closest("[data-route]");
+      if (routeLink) {
+        const route = routeLink.dataset.route;
+        if (location.hash === `#${route}`) setRoute(route);
+      }
+      if (event.target.closest("[data-top]")) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+    window.addEventListener("wheel", (event) => {
+      if (!pages.home.classList.contains("active") || homeRevealDone || event.deltaY <= 0 || window.scrollY > 20) return;
+      event.preventDefault();
+      triggerHomeReveal();
+    }, { passive: false });
+    window.addEventListener("keydown", (event) => {
+      if (preview?.classList.contains("active")) {
+        if (event.key === "Escape") closePreview();
+        if (event.key === "ArrowLeft") stepPreview(-1);
+        if (event.key === "ArrowRight") stepPreview(1);
+        return;
+      }
+      if (!pages.home.classList.contains("active") || homeRevealDone) return;
+      if (["ArrowDown", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        triggerHomeReveal();
+      }
+    });
+    window.addEventListener("touchmove", () => {
+      if (pages.home.classList.contains("active") && !homeRevealDone && window.scrollY > 12) triggerHomeReveal();
+    }, { passive: true });
+
+    setRoute(location.hash.replace("#", ""));
+  </script>
+</body>
+</html>
