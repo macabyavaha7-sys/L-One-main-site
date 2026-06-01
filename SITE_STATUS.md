@@ -35,9 +35,22 @@
 /
   assets/
     works/
+      index.json
       shougang/
         cover.webp
         image-01.webp ... image-18.webp
+        metadata.json
+      youhuayuan/
+        cover.webp
+        image-01.webp ... image-18.webp
+        metadata.json
+      baitasi/
+        cover.webp
+        image-01.webp ... image-08.webp
+        metadata.json
+      shunyi-kamakura/
+        cover.webp
+        image-01.webp ... image-13.webp
         metadata.json
   index.html
   README.md
@@ -54,6 +67,21 @@
 - 已接入内容：标题、摘要、标签、正文、18 张图片、图片预览层、左右切换按钮。
 - 当前图片策略：首钢园图片已随主站一起提交到 GitHub，并由 EdgeOne Pages 部署为站内静态资源。
 - 当前图片路径示例：`assets/works/shougang/image-01.webp`
+
+### 新增图文作品详情
+
+- 作品标题：《油画院 | 东五环的安静角落》
+  - 页面路由：`#work-youhuayuan`
+  - 内容来源：小红书图文归档
+  - 已接入内容：标题、摘要、标签、正文、18 张图片、图片预览层、左右切换按钮。
+- 作品标题：《白塔寺 | 夜晚的北京胡同》
+  - 页面路由：`#work-baitasi`
+  - 内容来源：小红书图文归档
+  - 已接入内容：标题、摘要、标签、正文、8 张图片、图片预览层、左右切换按钮。
+- 作品标题：《顺义“小镰仓”？ | 劝慎来，但有惊喜》
+  - 页面路由：`#work-shunyi-kamakura`
+  - 内容来源：小红书图文归档
+  - 已接入内容：标题、摘要、标签、正文、13 张图片、图片预览层、左右切换按钮。
 
 ## 素材仓库规划
 
@@ -102,17 +130,28 @@
 
 `D:\L-One Lab\03_独立项目\L-One-main-site\SITE_STATUS.md`
 
+执行边界文件：
+
+`D:\L-One Lab\03_独立项目\L-One-main-site\TASK_GUARDRAILS.md`
+
 更新规则：
 
 - 只修改 D 盘项目目录内的文件。
 - 不再把主站项目写入 C 盘。
 - 修改前先读取本状态文件，确认最新线上状态。
+- 修改前必须明确本次任务的目标、可修改范围、不可修改范围、预期可见结果和验证门槛。
 - 修改完成后更新本文件的“更新时间”和“最近变更”。
 - 修改完成后将变化同步到 GitHub 仓库。
 - 腾讯云 EdgeOne Pages 会根据 GitHub 仓库自动重新部署。
 
 ## 最近变更
+- 2026-06-01：修复首钢园作品来源平台、作品类型和页面标签的真实乱码问题，统一可见分隔符为 `·`；强化 `scripts/site-audit.js`，新增对 `??`、`???`、`�`、错误标签分隔符、作品元数据字段和正文完整性的检查；新增 `TASK_GUARDRAILS.md`，明确每次任务的可修改范围、不可修改范围和交付验证门槛。
+- 2026-06-01：恢复《首钢园｜永定河畔的微凉惬意》完整小红书原始正文（410 字），移除详情页正文区多余横线，新增 `scripts/site-audit.js` 作为交付前审查脚本，检查原文长度、禁止文案、乱码、路由和 JS 语法。
+- 2026-06-01：修复作品详情页正文区展示规则，删除“原文内容”标题、“原始内容入口”卡片和归档说明，单篇作品页仅保留原始标题、原始图片、原始笔记正文和必要作品元数据。
+- 2026-06-01：修复 Works 页面新增作品展示问题：分类筛选已接入真实 data-filter / data-work-type 交互，三篇新增作品恢复为完整信息卡片，四个作品详情页中文 UI 乱码已清理，并保留横向相册与图片预览功能。
 
+- 2026-06-01：批量归档 3 条小红书图文作品：《油画院 | 东五环的安静角落》《白塔寺 | 夜晚的北京胡同》《顺义“小镰仓”？ | 劝慎来，但有惊喜》；每篇作品独立存储 metadata、封面和图片组，并接入 Works 页面与独立详情页路由。
+- 2026-06-01：新增 `assets/works/index.json` 作为作品总索引，统一记录每篇作品的 ID、slug、标题、封面、metadata 路径和图片数量，避免后续批量调用时混淆。
 - 2026-06-01：搭建腾讯云轻量服务器临时素材仓库，Nginx 指向 `/www/l-one-static`，公网健康检查 `http://62.234.73.162/health.txt` 已通过。
 - 2026-06-01：首钢园图片从外部防盗链地址改为站内静态资源路径，并提交 `assets/works/shougang/image-01.webp` 至 `image-18.webp`。
 - 2026-06-01：修复 `assets/works/shougang/metadata.json`，恢复为可解析 JSON。

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "68d7b136000000001301e007",
+    "slug": "shougang",
+    "title": "首钢园｜永定河畔的微凉惬意",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-09-27",
+    "type": "图文",
+    "metadata": "assets/works/shougang/metadata.json",
+    "cover": "assets/works/shougang/image-01.webp",
+    "imageCount": 18
+  },
+  {
+    "id": "68844865000000001502083f",
+    "slug": "youhuayuan",
+    "title": "油画院 | 东五环的安静角落",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-07-26",
+    "type": "图文",
+    "metadata": "assets/works/youhuayuan/metadata.json",
+    "cover": "assets/works/youhuayuan/cover.webp",
+    "imageCount": 18
+  },
+  {
+    "id": "6887805d0000000017033e1c",
+    "slug": "baitasi",
+    "title": "白塔寺 | 夜晚的北京胡同",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-07-30",
+    "type": "图文",
+    "metadata": "assets/works/baitasi/metadata.json",
+    "cover": "assets/works/baitasi/cover.webp",
+    "imageCount": 8
+  },
+  {
+    "id": "6885bbda0000000017030403",
+    "slug": "shunyi-kamakura",
+    "title": "顺义“小镰仓”？ | 劝慎来，但有惊喜",
+    "sourcePlatform": "小红书",
+    "publishedAt": "2025-07-28",
+    "type": "图文",
+    "metadata": "assets/works/shunyi-kamakura/metadata.json",
+    "cover": "assets/works/shunyi-kamakura/cover.webp",
+    "imageCount": 13
+  }
+]
