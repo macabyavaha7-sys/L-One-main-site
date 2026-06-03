@@ -1,13 +1,13 @@
 # L-One Main Site Status
 
-更新时间：2026-06-01
+更新时间：2026-06-03
 
 ## 项目位置
 
 - 本地项目目录：`D:\L-One Lab\03_独立项目\L-One-main-site`
 - GitHub 仓库：`https://github.com/macabyavaha7-sys/L-One-main-site`
 - 默认分支：`main`
-- 当前内容上线提交：`692ad95 Add new works to main site`
+- 当前内容上线提交：`e9224d2 Add expanded works archive`
 - 当前 EdgeOne 状态：GitHub 已同步；EdgeOne 预览域名仍返回旧部署，需要在腾讯云 EdgeOne 控制台确认构建记录或手动重新部署。
 
 ## 当前部署状态
@@ -132,6 +132,9 @@
 
 ## 最近变更
 
+- 2026-06-03：修复 Works 近期推荐栏 active 标题被左侧容器裁切、视觉上贴近封面的问题：将 active 标题定位从右侧边缘收回到左侧安全区，并限制 spotlight 标题宽度，保证标题与右侧封面之间保留可见间距。同步增强 `scripts/site-audit.js`，增加推荐栏标题宽度和 active 标题安全位置检查。作品详情页正文、图片、metadata 未改动。
+- 2026-06-02：纠正 Works 改版范围：恢复具体分类页沿用原有卡片网格逻辑，只在 `全部分类` 视图的筛选条下方新增 `works-spotlight` 置顶交互模块；`图文`、`视频`、`文章` 分类继续按同级卡片列表展示。同步更新 `scripts/site-audit.js`，要求 Works 过滤器只扫描 `.works-board [data-work-type]`，并禁止旧的整页 selector 实现回流。作品详情页正文、图片、metadata 未改动。
+- 2026-06-02：调整 Works 页面结构：`works-spotlight` 改为 Works 首页固定顶部近期推荐栏，按作品在原平台的 `publishedAt` 倒序展示最近 5 条；分类栏移到推荐栏下方，仅保留 `图片`、`视频`、`文章` 三项；移除旧的静态首栏 featured 卡片，首钢园回到常规三列作品合集。同步收窄移动端标题换行规则，并更新 `scripts/site-audit.js` 检查推荐栏顺序、三项分类和禁止旧静态首栏回流。作品详情页正文、图片、metadata 未改动。
 - 2026-06-01：修复 Works 分类筛选稳定性问题：此前 `.works-board.is-filtered .work-featured` 覆盖了 `hidden` 状态，导致视频筛选页误显示首钢园图文作品；现已增加 `.works-board.is-filtered .work-featured[hidden]` / `.work-card[hidden]` 保护规则，并在 `scripts/site-audit.js` 中检查每个作品入口的 `data-work-type` 必须匹配 metadata。`TASK_GUARDRAILS.md` 新增“作品类型是硬边界”限制：视频页不得出现图文，图文页不得出现视频。
 - 2026-06-01：批量新增 9 条小红书视频作品：《一口叹气！好看的地方就是藏着不给看》《环球影城 | 年度总结篇2/3【吃喝】》《环球影城 | 一年去二十多次的总结篇1/3》《环球影城 | 一年去二十多次的总结篇3/3》《解放双手的小配件 | 运动相机》《如果你也在大望路上班 | 别在公司附近溜达》《北环影万圣节 | 证明我胆儿小的时候到了》《798艺术区 | 能把故事画墙上的地方》《在西五环 | 藏着一条绝美的旧铁路》；每条视频独立存储 metadata 和封面，接入 Works 视频分类与对应详情页。
 - 2026-06-01：新增第一条视频作品《去废弃铁轨上拍个照｜将府公园》：从小红书链接抓取标题、正文、标签、发布时间、封面和视频元数据，独立存储到 `assets/works/jiangfu-railway/metadata.json`，封面存储为 `assets/works/jiangfu-railway/cover.jpg`；Works 页面接入 `视频` 分类卡片和 `#work-jiangfu-railway` 详情页。由于小红书视频流为带签名临时 CDN 地址，当前详情页先使用站内封面 + 小红书原视频入口，不把临时视频流作为长期站内播放器。

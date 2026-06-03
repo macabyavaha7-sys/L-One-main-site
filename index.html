@@ -688,6 +688,132 @@
       line-height: 2;
       text-align: center;
     }
+    .works-spotlight {
+      display: grid;
+      grid-template-columns: minmax(260px, .86fr) minmax(360px, 1.14fr);
+      gap: clamp(34px, 5vw, 72px);
+      align-items: center;
+      max-width: 1040px;
+      margin: -18px auto 54px;
+      padding: 18px 0 8px;
+    }
+    .works-spotlight[hidden] {
+      display: none;
+    }
+    .spotlight-wheel {
+      position: relative;
+      min-width: 0;
+      min-height: 500px;
+      overflow: hidden;
+    }
+    .spotlight-title {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: min(300px, 100%);
+      border: 0;
+      background: transparent;
+      color: rgba(0, 0, 0, .28);
+      text-align: left;
+      cursor: pointer;
+      transform-origin: left center;
+      transition: color .24s ease, opacity .24s ease, transform .32s ease;
+    }
+    .spotlight-title strong {
+      display: block;
+      max-width: 10em;
+      font-size: clamp(14px, 1.85vw, 26px);
+      font-weight: 500;
+      letter-spacing: -.02em;
+      line-height: 1.08;
+    }
+    .spotlight-title span {
+      display: block;
+      margin-top: 10px;
+      color: rgba(0, 0, 0, .42);
+      font-size: 11px;
+      letter-spacing: .02em;
+    }
+    .spotlight-title.is-active {
+      color: #111;
+      opacity: 1;
+      z-index: 4;
+    }
+    .spotlight-preview {
+      position: relative;
+      min-width: 0;
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #f7f7f7;
+      box-shadow: var(--shadow);
+    }
+    .spotlight-preview img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: contain;
+      background: #f7f7f7;
+      filter: grayscale(.08) contrast(.98);
+    }
+    .spotlight-preview::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 42%;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .45));
+      pointer-events: none;
+    }
+    .spotlight-caption {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 22px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: #fff;
+    }
+    .spotlight-caption p {
+      margin: 0;
+      max-width: 440px;
+      color: rgba(255, 255, 255, .82);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .spotlight-open {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .92);
+      color: #111;
+      font-size: 12px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .14);
+    }
+    .spotlight-controls {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 3;
+      display: flex;
+      gap: 8px;
+    }
+    .spotlight-step {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, .46);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .68);
+      color: #111;
+      cursor: pointer;
+    }
     .works-board {
       display: grid;
       gap: 32px;
@@ -1407,9 +1533,20 @@
       .about-grid,
       .about-info,
       .work-featured,
+      .works-spotlight,
       .detail-hero,
       .detail-body {
         grid-template-columns: 1fr;
+      }
+      .works-spotlight {
+        max-width: 560px;
+      }
+      .spotlight-wheel {
+        min-height: 360px;
+      }
+      .spotlight-preview,
+      .spotlight-preview img {
+        min-height: 340px;
       }
       .detail-meta {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1464,6 +1601,50 @@
       .article-preview,
       .article-preview.reverse { gap: 26px; margin-bottom: 62px; }
       .filters { justify-content: flex-start; overflow-x: auto; gap: 12px; }
+      .works-spotlight {
+        gap: 18px;
+        margin-top: -22px;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .spotlight-wheel {
+        min-height: 132px;
+        overflow: hidden;
+      }
+      .spotlight-title {
+        display: none;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        opacity: 0 !important;
+        transform: none !important;
+      }
+      .spotlight-title.is-active {
+        display: block;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .spotlight-title strong {
+        max-width: calc(100vw - 44px);
+        font-size: clamp(24px, 7.4vw, 29px);
+        line-height: 1.06;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+      .spotlight-preview {
+        width: 100%;
+      }
+      .spotlight-preview,
+      .spotlight-preview img {
+        min-height: 300px;
+      }
+      .spotlight-caption {
+        display: block;
+      }
+      .spotlight-caption p {
+        margin-bottom: 14px;
+      }
       .lib-hero h1 { font-size: 46px; }
       .about-hero h1 { font-size: 74px; }
       .about-lead { font-size: 16px; }
@@ -1590,25 +1771,34 @@
 
     <section class="page" id="page-works">
       <div class="container">
-        <div class="section-head"><h1>作品归档</h1></div>
+        <div class="section-head"><h1>WORKS</h1></div>
         <p class="works-intro">把分散在不同平台上的图文、视频和文章整理成统一的 L-One 阅读入口。平台渠道只作为作品标签存在，作品本身在这里保持同一种版式。</p>
-        <div class="filters" aria-label="作品归档">
-          <button class="filter active" type="button" data-filter="all">全部分类</button>
-          <button class="filter" type="button" data-filter="图文">图文</button>
+        <div class="works-spotlight" data-works-spotlight>
+          <div class="spotlight-wheel" aria-label="置顶作品">
+            <button class="spotlight-title is-active" type="button" data-spotlight-index="0"><strong>解放双手的小配件<br>运动相机</strong><span>小红书 · 视频 · 2025.10.15</span></button>
+            <button class="spotlight-title" type="button" data-spotlight-index="1"><strong>首钢园｜永定河畔的<br>微凉惬意</strong><span>小红书 · 图文 · 2025.09.27</span></button>
+            <button class="spotlight-title" type="button" data-spotlight-index="2"><strong>798艺术区<br>能把故事画墙上的地方</strong><span>小红书 · 视频 · 2025.09.23</span></button>
+            <button class="spotlight-title" type="button" data-spotlight-index="3"><strong>北环影万圣节<br>证明我胆儿小的时候到了</strong><span>小红书 · 视频 · 2025.09.14</span></button>
+            <button class="spotlight-title" type="button" data-spotlight-index="4"><strong>去废弃铁轨上拍个照<br>将府公园</strong><span>小红书 · 视频 · 2025.09.11</span></button>
+          </div>
+          <div class="spotlight-preview">
+            <img id="spotlight-image" src="assets/works/action-camera-accessory/cover.jpg" alt="解放双手的小配件 | 运动相机封面" loading="lazy">
+            <div class="spotlight-controls" aria-label="切换置顶作品">
+              <button class="spotlight-step" type="button" data-spotlight-step="prev" aria-label="上一个置顶作品">&lsaquo;</button>
+              <button class="spotlight-step" type="button" data-spotlight-step="next" aria-label="下一个置顶作品">&rsaquo;</button>
+            </div>
+            <div class="spotlight-caption">
+              <p id="spotlight-desc">不是广告，自用半年的小配件。</p>
+              <a class="spotlight-open" id="spotlight-open" href="#work-action-camera-accessory" data-route="work-action-camera-accessory">查看详情</a>
+            </div>
+          </div>
+        </div>
+        <div class="filters" aria-label="作品分类">
+          <button class="filter" type="button" data-filter="图文">图片</button>
           <button class="filter" type="button" data-filter="视频">视频</button>
           <button class="filter" type="button" data-filter="文章">文章</button>
         </div>
         <div class="works-board">
-          <a class="work-featured" href="#work-shougang" data-route="work-shougang" data-work-type="图文">
-            <img class="work-photo" src="assets/works/shougang/image-01.webp" alt="首钢园｜永定河畔的微凉惬意图片" loading="lazy">
-            <div class="work-copy">
-              <div class="work-kicker">小红书 · 图文 · 城市观察</div>
-              <h2>首钢园｜永定河畔的微凉惬意</h2>
-              <p>永定河水很湍急，声音很大，</p>
-              <div class="work-tags"><span>#整点儿摄影节奏</span><span>#城市漫游者</span><span>#旅游编辑部</span><span>#首钢园</span></div>
-              <div class="work-actions"><span class="ghost-btn">查看详情 →</span></div>
-            </div>
-          </a>
           <div class="work-grid">
             <a class="work-card" href="#work-action-camera-accessory" data-route="work-action-camera-accessory" data-work-type="视频">
               <div class="video-card-cover">
@@ -1620,6 +1810,16 @@
                 <h3>解放双手的小配件 | 运动相机</h3>
                 <p>不是广告，自用半年的小配件。</p>
                 <div class="work-tags"><span>#整点儿摄影节奏</span><span>#运动相机拍摄</span><span>#我的休闲时光十月激励计划</span><span>#路上走走</span></div>
+                <span class="ghost-btn">查看详情 →</span>
+              </div>
+            </a>
+            <a class="work-card" href="#work-shougang" data-route="work-shougang" data-work-type="图文">
+              <img class="work-photo" src="assets/works/shougang/image-01.webp" alt="首钢园｜永定河畔的微凉惬意图片" loading="lazy">
+              <div class="work-card-body">
+                <div class="work-kicker">小红书 · 图文 · 城市观察</div>
+                <h3>首钢园｜永定河畔的微凉惬意</h3>
+                <p>永定河水很湍急，声音很大，</p>
+                <div class="work-tags"><span>#整点儿摄影节奏</span><span>#城市漫游者</span><span>#旅游编辑部</span><span>#首钢园</span></div>
                 <span class="ghost-btn">查看详情 →</span>
               </div>
             </a>
@@ -2429,6 +2629,44 @@
     let revealTimer = 0;
     let activePreviewImages = [];
     let previewIndex = 0;
+    const spotlightItems = [
+      {
+        route: "work-action-camera-accessory",
+        title: "解放双手的小配件 | 运动相机",
+        meta: "小红书 · 视频 · 2025.10.15",
+        desc: "不是广告，自用半年的小配件。",
+        image: "assets/works/action-camera-accessory/cover.jpg"
+      },
+      {
+        route: "work-shougang",
+        title: "首钢园｜永定河畔的微凉惬意",
+        meta: "小红书 · 图文 · 2025.09.27",
+        desc: "永定河水很湍急，声音很大，",
+        image: "assets/works/shougang/image-01.webp"
+      },
+      {
+        route: "work-art798-wall-story",
+        title: "798艺术区 | 能把故事画墙上的地方",
+        meta: "小红书 · 视频 · 2025.09.23",
+        desc: "吐槽：北京公园年票里赠送的两个场馆，不来也罢~；",
+        image: "assets/works/art798-wall-story/cover.jpg"
+      },
+      {
+        route: "work-universal-halloween",
+        title: "北环影万圣节 | 证明我胆儿小的时候到了",
+        meta: "小红书 · 视频 · 2025.09.14",
+        desc: "这么大一男的还怕鬼吗？",
+        image: "assets/works/universal-halloween/cover.jpg"
+      },
+      {
+        route: "work-jiangfu-railway",
+        title: "去废弃铁轨上拍个照｜将府公园",
+        meta: "小红书 · 视频 · 2025.09.11",
+        desc: "蜿蜒的旧轨道🛤️，在“将府公园南园”；",
+        image: "assets/works/jiangfu-railway/cover.jpg"
+      }
+    ];
+    let spotlightIndex = 0;
 
     function updateHomeRevealState(route) {
       const home = pages.home;
@@ -2452,12 +2690,46 @@
       document.title = route === "home" ? "L-One | 个人知识库" : "L-One | " + route;
       window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     }
+    function positionSpotlightTitles() {
+      const buttons = Array.from(document.querySelectorAll("[data-spotlight-index]"));
+      const positions = [
+        { x: 64, y: 218, rotate: 2, scale: 1, opacity: 1 },
+        { x: 210, y: 42, rotate: 16, scale: .54, opacity: .24 },
+        { x: 188, y: 388, rotate: -16, scale: .5, opacity: .18 },
+        { x: 18, y: 0, rotate: 28, scale: .42, opacity: .12 },
+        { x: 24, y: 462, rotate: -28, scale: .42, opacity: .1 }
+      ];
+      buttons.forEach((button, index) => {
+        const offset = (index - spotlightIndex + buttons.length) % buttons.length;
+        const position = positions[offset] || positions[positions.length - 1];
+        button.classList.toggle("is-active", index === spotlightIndex);
+        button.style.opacity = position.opacity;
+        button.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${position.rotate}deg) scale(${position.scale})`;
+      });
+    }
+    function setWorksSpotlight(index) {
+      const item = spotlightItems[index];
+      const image = document.getElementById("spotlight-image");
+      const desc = document.getElementById("spotlight-desc");
+      const open = document.getElementById("spotlight-open");
+      if (!item || !image || !desc || !open) return;
+      spotlightIndex = index;
+      image.src = item.image;
+      image.alt = item.title + "封面";
+      desc.textContent = item.desc;
+      open.href = "#" + item.route;
+      open.dataset.route = item.route;
+      positionSpotlightTitles();
+    }
+    function stepWorksSpotlight(direction) {
+      setWorksSpotlight((spotlightIndex + direction + spotlightItems.length) % spotlightItems.length);
+    }
     function applyWorkFilter(filter) {
-      const cards = Array.from(document.querySelectorAll("#page-works [data-work-type]"));
+      const cards = Array.from(document.querySelectorAll("#page-works .works-board [data-work-type]"));
       const worksBoard = document.querySelector("#page-works .works-board");
-      cards.forEach((card) => { card.hidden = !(filter === "all" || card.dataset.workType === filter); });
+      cards.forEach((card) => { card.hidden = Boolean(filter) && card.dataset.workType !== filter; });
       document.querySelectorAll("#page-works .filter[data-filter]").forEach((button) => button.classList.toggle("active", button.dataset.filter === filter));
-      worksBoard?.classList.toggle("is-filtered", filter !== "all");
+      worksBoard?.classList.toggle("is-filtered", Boolean(filter));
     }
     function showCarouselControls(carouselWrap) {
       if (!carouselWrap) return;
@@ -2508,6 +2780,10 @@
     document.addEventListener("click", (event) => {
       const filterButton = event.target.closest("#page-works .filter[data-filter]");
       if (filterButton) { applyWorkFilter(filterButton.dataset.filter); return; }
+      const spotlightTitle = event.target.closest("[data-spotlight-index]");
+      if (spotlightTitle) { setWorksSpotlight(Number(spotlightTitle.dataset.spotlightIndex)); return; }
+      const spotlightStep = event.target.closest("[data-spotlight-step]");
+      if (spotlightStep) { stepWorksSpotlight(spotlightStep.dataset.spotlightStep === "next" ? 1 : -1); return; }
       const carouselButton = event.target.closest("[data-carousel-action]");
       if (carouselButton) { scrollCarousel(carouselButton); return; }
       const previewAction = event.target.closest("[data-preview-action]")?.dataset.previewAction;
@@ -2524,6 +2800,11 @@
       if (routeLink && location.hash === "#" + routeLink.dataset.route) setRoute(routeLink.dataset.route);
       if (event.target.closest("[data-top]")) window.scrollTo({ top: 0, behavior: "smooth" });
     });
+    document.querySelector("[data-works-spotlight]")?.addEventListener("wheel", (event) => {
+      if (!pages.works?.classList.contains("active")) return;
+      event.preventDefault();
+      stepWorksSpotlight(event.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
     window.addEventListener("wheel", (event) => {
       if (!pages.home?.classList.contains("active") || homeRevealDone || event.deltaY <= 0 || window.scrollY > 20) return;
       event.preventDefault();
@@ -2540,7 +2821,8 @@
       if (["ArrowDown", "PageDown", " "].includes(event.key)) { event.preventDefault(); triggerHomeReveal(); }
     });
     window.addEventListener("touchmove", () => { if (pages.home?.classList.contains("active") && !homeRevealDone && window.scrollY > 12) triggerHomeReveal(); }, { passive: true });
-    applyWorkFilter("all");
+    setWorksSpotlight(0);
+    applyWorkFilter("");
     setRoute(location.hash.replace("#", ""));
   </script>
 </body>

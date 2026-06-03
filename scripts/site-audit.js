@@ -78,11 +78,16 @@ if (visibleHtml.includes(` ${KICKER_SEPARATOR.replace(KICKER_SEPARATOR, "?")} `)
 }
 
 const secondaryCards = html.match(/class="work-card"/g) || [];
-if (secondaryCards.length !== worksIndex.length - 1) {
-  fail(`Works page should render ${worksIndex.length - 1} secondary work cards, got ${secondaryCards.length}.`);
+if (secondaryCards.length !== worksIndex.length) {
+  fail(`Works page should render ${worksIndex.length} regular work cards, got ${secondaryCards.length}.`);
 }
-if ((html.match(/data-filter=/g) || []).length !== 4) {
-  fail("Works page should render 4 filter buttons.");
+if ((html.match(/data-filter=/g) || []).length !== 3) {
+  fail("Works page should render 3 category filter buttons.");
+}
+const worksPageMatch = html.match(/<section class="page" id="page-works">([\s\S]*?)<section class="page" id="page-work-/);
+const worksPageHtml = worksPageMatch?.[1] || "";
+if (stripNonVisibleBlocks(worksPageHtml).includes("\u5168\u90e8\u5206\u7c7b")) {
+  fail("Works page should not show an all-category filter button.");
 }
 if ((html.match(/work-story original-note/g) || []).length !== worksIndex.length) {
   fail("Each work detail page must render one original-note body block.");
@@ -91,8 +96,47 @@ const originalNoteCss = html.match(/\.work-story\.original-note \{[\s\S]*?\}/)?.
 if (originalNoteCss.includes("border-top") || originalNoteCss.includes("border-bottom")) {
   fail("Original note body should not use a hard horizontal divider.");
 }
-if (!html.includes(".works-board.is-filtered .work-featured[hidden]")) {
-  fail("Filtered Works layout must not override hidden featured cards.");
+if (html.includes('<a class="work-featured"')) {
+  fail("Works page should not render the old static featured card.");
+}
+if (!html.includes('<div class="section-head"><h1>WORKS</h1></div>')) {
+  fail("Works page title should be WORKS.");
+}
+if (!html.includes('class="works-spotlight" data-works-spotlight')) {
+  fail("Works page should include a scoped recent spotlight module.");
+}
+const latestFiveRoutes = worksIndex
+  .slice()
+  .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))
+  .slice(0, 5)
+  .map((work) => `work-${work.slug}`);
+const spotlightRoutesMatch = scriptMatch?.[1].match(/const spotlightItems = \[([\s\S]*?)\];/);
+const spotlightRouteText = spotlightRoutesMatch?.[1] || "";
+let previousRouteIndex = -1;
+for (const route of latestFiveRoutes) {
+  const routeIndex = spotlightRouteText.indexOf(`route: "${route}"`);
+  if (routeIndex === -1) {
+    fail(`Works spotlight is missing recent work route: ${route}.`);
+  }
+  if (routeIndex < previousRouteIndex) {
+    fail("Works spotlight routes should follow publishedAt descending order.");
+  }
+  previousRouteIndex = routeIndex;
+}
+if (!html.includes("#page-works .works-board [data-work-type]")) {
+  fail("Works filter must only target cards inside .works-board.");
+}
+if (!html.includes("applyWorkFilter(\"\")")) {
+  fail("Works page should default to the unfiltered regular card collection.");
+}
+if (html.includes("works-selector") || html.includes("worksData")) {
+  fail("Works page must not use the old full-page selector implementation.");
+}
+if (!html.includes("width: min(300px, 100%)")) {
+  fail("Spotlight active title should have a bounded width to avoid image overlap.");
+}
+if (!html.includes("{ x: 64, y: 218")) {
+  fail("Spotlight active title should stay inside the left text area.");
 }
 
 for (const work of worksIndex) {
