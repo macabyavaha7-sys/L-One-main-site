@@ -7,7 +7,7 @@
 - 本地项目目录：`D:\L-One Lab\03_独立项目\L-One-main-site`
 - GitHub 仓库：`https://github.com/macabyavaha7-sys/L-One-main-site`
 - 默认分支：`main`
-- 当前内容上线提交：`e9224d2 Add expanded works archive`
+- 当前内容上线提交：`561c136 Refine works spotlight layout`
 - 当前 EdgeOne 状态：GitHub 已同步；EdgeOne 预览域名仍返回旧部署，需要在腾讯云 EdgeOne 控制台确认构建记录或手动重新部署。
 
 ## 当前部署状态
