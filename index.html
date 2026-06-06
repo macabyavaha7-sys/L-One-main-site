@@ -126,6 +126,210 @@
     main { min-height: calc(100vh - 92px); }
     .page { display: none; }
     .page.active { display: block; }
+    body.home-shell {
+      overflow: hidden;
+      background: #11171a;
+      cursor: none;
+    }
+    body.home-shell .site-header { display: none; }
+    body.home-shell main { min-height: 100vh; }
+    #page-home .container { display: none; }
+    .home-m3-stage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: #11171a;
+      color: #f4f4ef;
+      isolation: isolate;
+    }
+    .home-m3-base,
+    .home-m3-stage canvas,
+    .home-m3-shade,
+    .home-m3-grain {
+      position: absolute;
+      inset: 0;
+    }
+    .home-m3-base {
+      background-image: url("assets/diffuse-home-bg.png");
+      background-size: cover;
+      background-position: center;
+      filter: saturate(.9) contrast(1.04);
+      transform: scale(1.02);
+      z-index: 1;
+    }
+    .home-m3-stage canvas {
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .home-m3-shade {
+      z-index: 3;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--m3-x, 50%) var(--m3-y, 50%), rgba(255,255,255,.18), rgba(255,255,255,0) 24%),
+        linear-gradient(180deg, rgba(8,11,12,.12), rgba(8,11,12,.42));
+      mix-blend-mode: screen;
+    }
+    .home-m3-grain {
+      z-index: 4;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,.18) 0 1px, transparent 1px),
+        radial-gradient(circle at 74% 62%, rgba(0,0,0,.2) 0 1px, transparent 1px);
+      background-size: 8px 8px, 11px 11px;
+      mix-blend-mode: overlay;
+    }
+    .home-m3-brand {
+      position: fixed;
+      left: 50%;
+      top: clamp(22px, 4vw, 48px);
+      z-index: 8;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.88);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 500;
+      letter-spacing: -.03em;
+      text-shadow: 0 1px 18px rgba(0,0,0,.34);
+    }
+    .home-m3-center {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 8;
+      display: grid;
+      gap: 26px;
+      width: min(620px, calc(100vw - 40px));
+      transform: translate(-50%, -50%);
+    }
+    .home-m3-nav {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      align-items: center;
+      color: rgba(255,255,255,.86);
+      text-transform: lowercase;
+      text-shadow: 0 1px 18px rgba(0,0,0,.34);
+    }
+    .home-m3-nav a {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+      text-align: center;
+      opacity: .72;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+    .home-m3-nav a:hover,
+    .home-m3-nav a.active {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+    .home-m3-nav .en {
+      font-size: clamp(12px, 1.4vw, 16px);
+      line-height: 1;
+      letter-spacing: .02em;
+    }
+    .home-m3-nav .zh {
+      font-size: 11px;
+      line-height: 1;
+      opacity: .72;
+      letter-spacing: .03em;
+    }
+    .home-m3-search {
+      position: relative;
+      width: min(460px, 100%);
+      margin: 0 auto;
+    }
+    .home-m3-search input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      outline: none;
+      padding: 0 22px;
+      color: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 18px 58px rgba(0,0,0,.16);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      text-align: center;
+      cursor: text;
+    }
+    .home-m3-search input::placeholder { color: rgba(255,255,255,.54); }
+    .home-m3-search input:focus {
+      border-color: rgba(255,255,255,.46);
+      background: rgba(255,255,255,.12);
+    }
+    .home-search-results {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 12px);
+      display: none;
+      width: min(420px, calc(100vw - 56px));
+      max-height: 280px;
+      overflow: auto;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 18px;
+      background: rgba(14,19,20,.72);
+      box-shadow: 0 24px 80px rgba(0,0,0,.22);
+      transform: translateX(-50%);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+    .home-search-results.active { display: grid; gap: 6px; }
+    .home-search-result {
+      display: grid;
+      gap: 5px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: rgba(255,255,255,.88);
+      text-align: left;
+    }
+    .home-search-result:hover { background: rgba(255,255,255,.08); }
+    .home-search-result strong {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    .home-search-result span {
+      color: rgba(255,255,255,.52);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .home-search-empty {
+      padding: 12px;
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      text-align: center;
+    }
+    .home-m3-cursor {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 9;
+      width: 17px;
+      height: 17px;
+      margin: -8.5px 0 0 -8.5px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.88);
+      box-shadow: 0 0 28px rgba(255,255,255,.22);
+      pointer-events: none;
+      transform: translate3d(var(--m3-x, 50vw), var(--m3-y, 50vh), 0);
+      transition: opacity .2s ease;
+    }
+    @media (max-width: 900px) {
+      .home-m3-brand { top: 24px; }
+      .home-m3-center { width: min(300px, calc(100vw - 72px)); gap: 22px; }
+      .home-m3-search { width: min(300px, 100%); }
+      .home-m3-nav .en { font-size: 12px; }
+      .home-m3-nav .zh { font-size: 10px; }
+      .home-m3-search input { height: 44px; }
+      .home-m3-cursor { display: none; }
+      body.home-shell { cursor: auto; }
+    }
     #page-home.awaiting-reveal .home-reveal-content {
       opacity: 0;
       transform: translateY(94px) scale(.975);
@@ -525,6 +729,79 @@
       margin: 60px 0 0;
       padding: 22px 0 28px;
       text-align: center;
+    }
+
+    .recent-page {
+      padding-bottom: 110px;
+    }
+    .recent-intro {
+      max-width: 560px;
+      margin: -48px auto 72px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 2;
+      text-align: center;
+    }
+    .recent-feed {
+      display: grid;
+      gap: 18px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .recent-entry {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: 22px 0;
+      border-top: 1px solid rgba(0,0,0,.08);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .recent-entry:last-child {
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .recent-entry:hover {
+      opacity: .78;
+      transform: translateY(-1px);
+    }
+    .recent-date {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .recent-main {
+      display: grid;
+      gap: 8px;
+    }
+    .recent-main strong {
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
+    .recent-main span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .recent-type {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    @media (max-width: 720px) {
+      .recent-intro {
+        margin-top: -54px;
+        text-align: left;
+      }
+      .recent-entry {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 22px 0;
+      }
+      .recent-type {
+        justify-self: start;
+      }
     }
 
     .article-columns {
@@ -1676,7 +1953,7 @@
     <div class="container header-inner">
       <a class="logo" href="#home" data-route="home">L-One</a>
       <nav class="nav" aria-label="主导航">
-        <a class="nav-link" href="#home" data-route="home"><strong>Recent</strong><span>最近</span></a>
+        <a class="nav-link" href="#recent" data-route="recent"><strong>Recent</strong><span>最近</span></a>
         <a class="nav-link" href="#works" data-route="works"><strong>Works</strong><span>作品</span></a>
         <a class="nav-link" href="#skills" data-route="skills"><strong>Skills</strong><span>技能库</span></a>
         <a class="nav-link" href="#about" data-route="about"><strong>About</strong><span>L-One</span></a>
@@ -1690,6 +1967,26 @@
 
   <main>
     <section class="page" id="page-home">
+      <div class="home-m3-stage" id="home-m3-stage" aria-label="L-One 主页">
+        <div class="home-m3-base" aria-hidden="true"></div>
+        <canvas id="home-m3-canvas" aria-hidden="true"></canvas>
+        <div class="home-m3-shade" aria-hidden="true"></div>
+        <div class="home-m3-grain" aria-hidden="true"></div>
+        <div class="home-m3-cursor" id="home-m3-cursor" aria-hidden="true"></div>
+        <a class="home-m3-brand" href="#home" data-route="home">L-One</a>
+        <div class="home-m3-center">
+          <nav class="home-m3-nav" aria-label="主导航">
+            <a href="#recent" data-route="recent"><span class="en">recent</span><span class="zh">最近</span></a>
+            <a href="#works" data-route="works"><span class="en">work</span><span class="zh">作品</span></a>
+            <a href="#skills" data-route="skills"><span class="en">skills</span><span class="zh">技能库</span></a>
+            <a href="#about" data-route="about"><span class="en">about</span><span class="zh">关于</span></a>
+          </nav>
+          <form class="home-m3-search" id="home-search-form" role="search" autocomplete="off">
+            <input id="home-search-input" type="search" placeholder="搜索 L-One" aria-label="搜索 L-One">
+            <div class="home-search-results" id="home-search-results" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
       <div class="container">
         <div class="section-head"><h1>近期灵感</h1></div>
         <div class="hero-grid">
@@ -1765,6 +2062,45 @@
             </article>
           </div>
           <footer class="footer-line"><button class="ghost-btn" type="button" data-top>回到顶部</button></footer>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-recent">
+      <div class="container recent-page">
+        <div class="section-head"><h1>Recent</h1></div>
+        <p class="recent-intro">这里集中放置 L-One 最近更新的作品、技能库和站点内容入口。首页保持轻入口，Recent 负责承接持续更新。</p>
+        <div class="recent-feed">
+          <a class="recent-entry" href="#work-action-camera-accessory" data-route="work-action-camera-accessory">
+            <time class="recent-date">2025.10.15</time>
+            <span class="recent-main"><strong>解放双手的小配件 | 运动相机</strong><span>小红书 · 视频</span></span>
+            <span class="recent-type">查看作品</span>
+          </a>
+          <a class="recent-entry" href="#work-shougang" data-route="work-shougang">
+            <time class="recent-date">2025.09.27</time>
+            <span class="recent-main"><strong>首钢园 | 永定河畔的微凉惬意</strong><span>小红书 · 图文</span></span>
+            <span class="recent-type">查看作品</span>
+          </a>
+          <a class="recent-entry" href="#work-art798-wall-story" data-route="work-art798-wall-story">
+            <time class="recent-date">2025.09.23</time>
+            <span class="recent-main"><strong>798艺术区 | 能把故事画墙上的地方</strong><span>小红书 · 视频</span></span>
+            <span class="recent-type">查看作品</span>
+          </a>
+          <a class="recent-entry" href="#work-universal-halloween" data-route="work-universal-halloween">
+            <time class="recent-date">2025.09.14</time>
+            <span class="recent-main"><strong>北环影万圣节 | 证明我胆儿小的时候到了</strong><span>小红书 · 视频</span></span>
+            <span class="recent-type">查看作品</span>
+          </a>
+          <a class="recent-entry" href="#works" data-route="works">
+            <time class="recent-date">Works</time>
+            <span class="recent-main"><strong>作品归档</strong><span>进入图文、视频、文章的统一作品入口</span></span>
+            <span class="recent-type">进入 Works</span>
+          </a>
+          <a class="recent-entry" href="#skills" data-route="skills">
+            <time class="recent-date">Skills</time>
+            <span class="recent-main"><strong>技能库</strong><span>进入已整理和后续公开的技能内容集合</span></span>
+            <span class="recent-type">进入 Skills</span>
+          </a>
         </div>
       </div>
     </section>
@@ -2619,16 +2955,31 @@
   </div>
 
   <script>
-    const routes = ["home","works","work-action-camera-accessory","work-shougang","work-art798-wall-story","work-universal-halloween","work-jiangfu-railway","work-dawanglu-after-work","work-west-railway","work-hidden-view","work-universal-summary-3","work-universal-food-2","work-universal-summary-1","work-baitasi","work-shunyi-kamakura","work-youhuayuan","skills","about"];
+    const routes = ["home","recent","works","work-action-camera-accessory","work-shougang","work-art798-wall-story","work-universal-halloween","work-jiangfu-railway","work-dawanglu-after-work","work-west-railway","work-hidden-view","work-universal-summary-3","work-universal-food-2","work-universal-summary-1","work-baitasi","work-shunyi-kamakura","work-youhuayuan","skills","about"];
     const pages = Object.fromEntries(routes.map((route) => [route, document.getElementById("page-" + route)]));
     const navLinks = Array.from(document.querySelectorAll("[data-route]"));
     const preview = document.getElementById("photo-preview");
     const previewImg = preview?.querySelector(".photo-preview-img");
     const previewCounter = document.getElementById("preview-counter");
     let homeRevealDone = false;
+    const homeRevealEnabled = false;
     let revealTimer = 0;
     let activePreviewImages = [];
     let previewIndex = 0;
+    const searchItems = [
+      { route: "recent", title: "Recent", meta: "最近更新 · 作品与技能入口", keywords: "最近 更新 recent 入口" },
+      { route: "works", title: "Works", meta: "作品归档 · 图文 视频 文章", keywords: "作品 图文 视频 文章 works" },
+      { route: "skills", title: "Skills", meta: "技能库 · 资料与技能集合", keywords: "技能库 skills skill 资料" },
+      { route: "about", title: "About", meta: "L-One · 个人介绍", keywords: "关于 about l-one" },
+      { route: "work-action-camera-accessory", title: "解放双手的小配件 | 运动相机", meta: "小红书 · 视频 · 2025.10.15", keywords: "运动相机 配件 视频" },
+      { route: "work-shougang", title: "首钢园 | 永定河畔的微凉惬意", meta: "小红书 · 图文 · 2025.09.27", keywords: "首钢园 永定河 图文 城市观察" },
+      { route: "work-art798-wall-story", title: "798艺术区 | 能把故事画墙上的地方", meta: "小红书 · 视频 · 2025.09.23", keywords: "798 艺术区 视频 城市观察" },
+      { route: "work-universal-halloween", title: "北环影万圣节 | 证明我胆儿小的时候到了", meta: "小红书 · 视频 · 2025.09.14", keywords: "环球影城 万圣节 视频" },
+      { route: "work-jiangfu-railway", title: "去废弃铁轨上拍个照 | 将府公园", meta: "小红书 · 视频 · 2025.09.11", keywords: "将府公园 废弃铁轨 视频" },
+      { route: "work-baitasi", title: "白塔寺 | 夜晚的北京胡同", meta: "小红书 · 图文", keywords: "白塔寺 北京 胡同 图文" },
+      { route: "work-youhuayuan", title: "油画院 | 东五环的安静角落", meta: "小红书 · 图文", keywords: "油画院 东五环 图文" },
+      { route: "work-shunyi-kamakura", title: "顺义“小镰仓”？ | 劝慎来，但有惊喜", meta: "小红书 · 图文", keywords: "顺义 小镰仓 图文" }
+    ];
     const spotlightItems = [
       {
         route: "work-action-camera-accessory",
@@ -2668,14 +3019,129 @@
     ];
     let spotlightIndex = 0;
 
+    function initM3Home() {
+      const stage = document.getElementById("home-m3-stage");
+      const canvas = document.getElementById("home-m3-canvas");
+      const cursor = document.getElementById("home-m3-cursor");
+      if (!stage || !canvas) return;
+
+      const ctx = canvas.getContext("2d", { alpha: true });
+      const image = new Image();
+      image.src = "assets/diffuse-home-bg.png";
+      const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2, tx: window.innerWidth / 2, ty: window.innerHeight / 2 };
+      const ripples = [];
+      const smoke = [];
+      let frame = 0;
+
+      function resizeM3() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      function drawCoverImage(alpha) {
+        if (!image.complete || !image.naturalWidth) return;
+        const scale = Math.max(window.innerWidth / image.naturalWidth, window.innerHeight / image.naturalHeight);
+        const width = image.naturalWidth * scale;
+        const height = image.naturalHeight * scale;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(image, left, top, width, height);
+        ctx.restore();
+      }
+      function pushRipple(x, y, power) {
+        ripples.push({ x, y, r: 18, a: power });
+        if (ripples.length > 14) ripples.shift();
+      }
+      function pushSmoke(x, y) {
+        smoke.push({
+          x,
+          y,
+          vx: (Math.random() - .5) * .9,
+          vy: -Math.random() * .7,
+          r: 38 + Math.random() * 74,
+          a: .12 + Math.random() * .13,
+          hue: Math.random() > .55 ? "236,242,241" : "180,196,202"
+        });
+        if (smoke.length > 42) smoke.shift();
+      }
+      function drawM3() {
+        requestAnimationFrame(drawM3);
+        if (!document.body.classList.contains("home-shell")) return;
+        frame += 1;
+        pointer.x += (pointer.tx - pointer.x) * .11;
+        pointer.y += (pointer.ty - pointer.y) * .11;
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        drawCoverImage(.12);
+        const ambient = ctx.createRadialGradient(pointer.x, pointer.y, 12, pointer.x, pointer.y, Math.max(window.innerWidth, window.innerHeight) * .68);
+        ambient.addColorStop(0, "rgba(255,255,255,.16)");
+        ambient.addColorStop(.38, "rgba(196,214,219,.08)");
+        ambient.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = ambient;
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        if (frame % 3 === 0) pushSmoke(pointer.x, pointer.y);
+        smoke.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.r += .42;
+          p.a *= .985;
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+          g.addColorStop(0, `rgba(${p.hue},${p.a})`);
+          g.addColorStop(1, `rgba(${p.hue},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        for (let i = smoke.length - 1; i >= 0; i -= 1) {
+          if (smoke[i].a < .01) smoke.splice(i, 1);
+        }
+
+        ripples.forEach((r) => {
+          r.r += 13;
+          r.a *= .9;
+          ctx.strokeStyle = `rgba(255,255,255,${r.a})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+        for (let i = ripples.length - 1; i >= 0; i -= 1) {
+          if (ripples[i].a < .015) ripples.splice(i, 1);
+        }
+      }
+
+      resizeM3();
+      window.addEventListener("resize", resizeM3);
+      stage.addEventListener("pointermove", (event) => {
+        pointer.tx = event.clientX;
+        pointer.ty = event.clientY;
+        stage.style.setProperty("--m3-x", event.clientX + "px");
+        stage.style.setProperty("--m3-y", event.clientY + "px");
+        document.documentElement.style.setProperty("--m3-x", event.clientX + "px");
+        document.documentElement.style.setProperty("--m3-y", event.clientY + "px");
+        if (cursor) cursor.style.opacity = "1";
+        if (frame % 4 === 0) pushRipple(event.clientX, event.clientY, .12);
+      });
+      stage.addEventListener("pointerdown", (event) => pushRipple(event.clientX, event.clientY, .24));
+      stage.addEventListener("pointerleave", () => { if (cursor) cursor.style.opacity = "0"; });
+      drawM3();
+    }
+
     function updateHomeRevealState(route) {
       const home = pages.home;
-      if (!home) return;
+      if (!home || !homeRevealEnabled) return;
       home.classList.toggle("awaiting-reveal", route === "home" && !homeRevealDone);
       home.classList.toggle("reveal-complete", route === "home" && homeRevealDone);
     }
     function triggerHomeReveal() {
-      if (homeRevealDone || !pages.home?.classList.contains("active")) return;
+      if (!homeRevealEnabled || homeRevealDone || !pages.home?.classList.contains("active")) return;
       homeRevealDone = true;
       updateHomeRevealState("home");
       clearTimeout(revealTimer);
@@ -2683,6 +3149,7 @@
     }
     function setRoute(rawRoute) {
       const route = routes.includes(rawRoute) ? rawRoute : "home";
+      document.body.classList.toggle("home-shell", route === "home");
       routes.forEach((name) => pages[name]?.classList.toggle("active", name === route));
       const activeRoute = route.startsWith("work-") ? "works" : route;
       navLinks.forEach((link) => link.classList.toggle("active", link.dataset.route === activeRoute));
@@ -2723,6 +3190,43 @@
     }
     function stepWorksSpotlight(direction) {
       setWorksSpotlight((spotlightIndex + direction + spotlightItems.length) % spotlightItems.length);
+    }
+    function getSearchMatches(query) {
+      const term = query.trim().toLowerCase();
+      if (!term) return [];
+      return searchItems.filter((item) => (item.title + " " + item.meta + " " + item.keywords).toLowerCase().includes(term)).slice(0, 6);
+    }
+    function renderHomeSearch(query) {
+      const results = document.getElementById("home-search-results");
+      if (!results) return [];
+      const matches = getSearchMatches(query);
+      results.innerHTML = "";
+      results.classList.toggle("active", Boolean(query.trim()));
+      if (!query.trim()) return [];
+      if (matches.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "home-search-empty";
+        empty.textContent = "没有找到匹配内容";
+        results.appendChild(empty);
+        return [];
+      }
+      matches.forEach((item) => {
+        const link = document.createElement("a");
+        link.className = "home-search-result";
+        link.href = "#" + item.route;
+        link.dataset.route = item.route;
+        const title = document.createElement("strong");
+        title.textContent = item.title;
+        const meta = document.createElement("span");
+        meta.textContent = item.meta;
+        link.append(title, meta);
+        results.appendChild(link);
+      });
+      return matches;
+    }
+    function navigateToRoute(route) {
+      location.hash = "#" + route;
+      setRoute(route);
     }
     function applyWorkFilter(filter) {
       const cards = Array.from(document.querySelectorAll("#page-works .works-board [data-work-type]"));
@@ -2776,6 +3280,13 @@
       wrap.addEventListener("pointermove", () => showCarouselControls(wrap));
       wrap.addEventListener("pointerenter", () => showCarouselControls(wrap));
     });
+    document.getElementById("home-search-input")?.addEventListener("input", (event) => renderHomeSearch(event.target.value));
+    document.getElementById("home-search-form")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = document.getElementById("home-search-input");
+      const matches = renderHomeSearch(input?.value || "");
+      if (matches[0]) navigateToRoute(matches[0].route);
+    });
     window.addEventListener("hashchange", () => setRoute(location.hash.replace("#", "")));
     document.addEventListener("click", (event) => {
       const filterButton = event.target.closest("#page-works .filter[data-filter]");
@@ -2797,6 +3308,7 @@
       const carouselImage = event.target.closest(".photo-slide .work-photo");
       if (carouselImage) { openPreview(carouselImage); return; }
       const routeLink = event.target.closest("[data-route]");
+      if (routeLink && routeLink.closest("#home-search-results")) document.getElementById("home-search-results")?.classList.remove("active");
       if (routeLink && location.hash === "#" + routeLink.dataset.route) setRoute(routeLink.dataset.route);
       if (event.target.closest("[data-top]")) window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -2806,7 +3318,7 @@
       stepWorksSpotlight(event.deltaY > 0 ? 1 : -1);
     }, { passive: false });
     window.addEventListener("wheel", (event) => {
-      if (!pages.home?.classList.contains("active") || homeRevealDone || event.deltaY <= 0 || window.scrollY > 20) return;
+      if (!homeRevealEnabled || !pages.home?.classList.contains("active") || homeRevealDone || event.deltaY <= 0 || window.scrollY > 20) return;
       event.preventDefault();
       triggerHomeReveal();
     }, { passive: false });
@@ -2817,10 +3329,11 @@
         if (event.key === "ArrowRight") stepPreview(1);
         return;
       }
-      if (!pages.home?.classList.contains("active") || homeRevealDone) return;
+      if (!homeRevealEnabled || !pages.home?.classList.contains("active") || homeRevealDone) return;
       if (["ArrowDown", "PageDown", " "].includes(event.key)) { event.preventDefault(); triggerHomeReveal(); }
     });
-    window.addEventListener("touchmove", () => { if (pages.home?.classList.contains("active") && !homeRevealDone && window.scrollY > 12) triggerHomeReveal(); }, { passive: true });
+    window.addEventListener("touchmove", () => { if (homeRevealEnabled && pages.home?.classList.contains("active") && !homeRevealDone && window.scrollY > 12) triggerHomeReveal(); }, { passive: true });
+    initM3Home();
     setWorksSpotlight(0);
     applyWorkFilter("");
     setRoute(location.hash.replace("#", ""));

@@ -1,6 +1,6 @@
 # L-One Main Site Status
 
-更新时间：2026-06-03
+更新时间：2026-06-06
 
 ## 项目位置
 
@@ -132,6 +132,8 @@
 
 ## 最近变更
 
+- 2026-06-06：在 M3 首页基础上增加入口型信息结构：顶部居中保留 `L-One`，中心加入 `recent / work / skills / about` 四个导航文字和极简站内搜索框；新增 `#recent` 二级页面，集中承接最近更新的作品与入口；顶部 header 的 Recent 改为跳转 `#recent`。搜索框当前使用前端轻量索引，覆盖 Recent、Works、Skills、About 和已接入作品标题/关键词。Works 分类、作品详情页和素材归档未改动。
+- 2026-06-06：将主站首页替换为 M3 diffuse 视觉首页：接入 `assets/diffuse-home-bg.png` 背景图、首页专用 Canvas 光雾交互层和无底框文字导航；首页隐藏原有 header、搜索框、旧 hero 推荐栏和下方分类内容，导航继续跳转 `#home`、`#works`、`#skills`、`#about`。本次变更仅限首页呈现与首页路由状态，Works 数据、作品详情页、分类筛选和素材归档未改动。
 - 2026-06-03：修复 Works 近期推荐栏 active 标题被左侧容器裁切、视觉上贴近封面的问题：将 active 标题定位从右侧边缘收回到左侧安全区，并限制 spotlight 标题宽度，保证标题与右侧封面之间保留可见间距。同步增强 `scripts/site-audit.js`，增加推荐栏标题宽度和 active 标题安全位置检查。作品详情页正文、图片、metadata 未改动。
 - 2026-06-02：纠正 Works 改版范围：恢复具体分类页沿用原有卡片网格逻辑，只在 `全部分类` 视图的筛选条下方新增 `works-spotlight` 置顶交互模块；`图文`、`视频`、`文章` 分类继续按同级卡片列表展示。同步更新 `scripts/site-audit.js`，要求 Works 过滤器只扫描 `.works-board [data-work-type]`，并禁止旧的整页 selector 实现回流。作品详情页正文、图片、metadata 未改动。
 - 2026-06-02：调整 Works 页面结构：`works-spotlight` 改为 Works 首页固定顶部近期推荐栏，按作品在原平台的 `publishedAt` 倒序展示最近 5 条；分类栏移到推荐栏下方，仅保留 `图片`、`视频`、`文章` 三项；移除旧的静态首栏 featured 卡片，首钢园回到常规三列作品合集。同步收窄移动端标题换行规则，并更新 `scripts/site-audit.js` 检查推荐栏顺序、三项分类和禁止旧静态首栏回流。作品详情页正文、图片、metadata 未改动。
