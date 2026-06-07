@@ -153,7 +153,7 @@
       background-image: url("assets/diffuse-home-bg.png");
       background-size: cover;
       background-position: center;
-      filter: saturate(.9) contrast(1.04);
+      filter: brightness(.7) saturate(.88) contrast(1.05);
       transform: scale(1.02);
       z-index: 1;
     }
@@ -167,8 +167,8 @@
       z-index: 3;
       pointer-events: none;
       background:
-        radial-gradient(circle at var(--m3-x, 50%) var(--m3-y, 50%), rgba(255,255,255,.18), rgba(255,255,255,0) 24%),
-        linear-gradient(180deg, rgba(8,11,12,.12), rgba(8,11,12,.42));
+        radial-gradient(circle at var(--m3-x, 50%) var(--m3-y, 50%), rgba(255,255,255,.11), rgba(255,255,255,0) 17%),
+        linear-gradient(180deg, rgba(8,11,12,.28), rgba(8,11,12,.58));
       mix-blend-mode: screen;
     }
     .home-m3-grain {
@@ -315,7 +315,7 @@
       margin: -8.5px 0 0 -8.5px;
       border-radius: 50%;
       border: 1px solid rgba(255,255,255,.88);
-      box-shadow: 0 0 28px rgba(255,255,255,.22);
+      box-shadow: 0 0 20px rgba(255,255,255,.2);
       pointer-events: none;
       transform: translate3d(var(--m3-x, 50vw), var(--m3-y, 50vh), 0);
       transition: opacity .2s ease;
@@ -3063,8 +3063,8 @@
           y,
           vx: (Math.random() - .5) * .9,
           vy: -Math.random() * .7,
-          r: 38 + Math.random() * 74,
-          a: .12 + Math.random() * .13,
+          r: 27 + Math.random() * 52,
+          a: .1 + Math.random() * .1,
           hue: Math.random() > .55 ? "236,242,241" : "180,196,202"
         });
         if (smoke.length > 42) smoke.shift();
@@ -3077,10 +3077,10 @@
         pointer.y += (pointer.ty - pointer.y) * .11;
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-        drawCoverImage(.12);
-        const ambient = ctx.createRadialGradient(pointer.x, pointer.y, 12, pointer.x, pointer.y, Math.max(window.innerWidth, window.innerHeight) * .68);
-        ambient.addColorStop(0, "rgba(255,255,255,.16)");
-        ambient.addColorStop(.38, "rgba(196,214,219,.08)");
+        drawCoverImage(.08);
+        const ambient = ctx.createRadialGradient(pointer.x, pointer.y, 10, pointer.x, pointer.y, Math.max(window.innerWidth, window.innerHeight) * .48);
+        ambient.addColorStop(0, "rgba(255,255,255,.13)");
+        ambient.addColorStop(.38, "rgba(196,214,219,.06)");
         ambient.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = ambient;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
