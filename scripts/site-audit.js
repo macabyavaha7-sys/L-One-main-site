@@ -4,6 +4,12 @@ const path = require("path");
 const root = path.resolve(__dirname, "..");
 const htmlPath = path.join(root, "index.html");
 const worksIndexPath = path.join(root, "assets", "works", "index.json");
+const materialsDir = path.join(root, "materials");
+const materialsHtmlPath = path.join(materialsDir, "index.html");
+const materialsCssPath = path.join(materialsDir, "materials.css");
+const materialsJsPath = path.join(materialsDir, "materials.js");
+const materialsConfigPath = path.join(materialsDir, "config.json");
+const materialsDataPath = path.join(materialsDir, "data", "assets.json");
 
 const SOURCE_PLATFORM = "\u5c0f\u7ea2\u4e66";
 const TYPE_IMAGE_TEXT = "\u56fe\u6587";
@@ -49,6 +55,79 @@ const failures = [];
 const html = read(htmlPath);
 const visibleHtml = stripNonVisibleBlocks(html);
 const worksIndex = JSON.parse(read(worksIndexPath));
+
+if (!html.includes('href="materials/"') || !html.includes('<strong>Materials</strong><span>素材库</span>')) {
+  fail("Main navigation should include Materials / 素材库 linking to materials/.");
+}
+if (!html.includes('{ url: "materials/", title: "Materials"')) {
+  fail("Home search index should include the Materials page.");
+}
+if (!/\.home-m3-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/.test(html)) {
+  fail("Home center navigation should keep all five links on one row.");
+}
+
+[
+  materialsHtmlPath,
+  materialsCssPath,
+  materialsJsPath,
+  materialsConfigPath,
+  materialsDataPath,
+].forEach((filePath) => {
+  if (!fs.existsSync(filePath)) fail(`Materials page file is missing: ${path.relative(root, filePath)}.`);
+});
+
+if (fs.existsSync(materialsHtmlPath)) {
+  const materialsHtml = read(materialsHtmlPath);
+  const visibleMaterialsHtml = stripNonVisibleBlocks(materialsHtml);
+  checkNoCorruption("visible materials/index.html", visibleMaterialsHtml);
+  [
+    "Materials",
+    "素材库",
+    "搜索素材",
+    "分类",
+    "文件类型",
+    "标签",
+    "素材上传",
+    "暂无素材",
+  ].forEach((term) => {
+    if (!visibleMaterialsHtml.includes(term)) fail(`Materials page is missing visible text: ${term}.`);
+  });
+  ["grid", "list", "folder"].forEach((view) => {
+    if (!materialsHtml.includes(`data-view="${view}"`)) fail(`Materials page is missing ${view} view control.`);
+  });
+  if (!materialsHtml.includes('href="../index.html#home"')) {
+    fail("Materials page should link back to the main site home route.");
+  }
+}
+
+if (fs.existsSync(materialsCssPath)) {
+  const materialsCss = read(materialsCssPath);
+  if (!materialsCss.includes("--page: #fff;")) {
+    fail("Materials page background should match the main site's white background.");
+  }
+  if (!materialsCss.includes("background: rgba(255, 255, 255, .88);")) {
+    fail("Materials header background should match the white page background.");
+  }
+}
+
+if (fs.existsSync(materialsJsPath)) {
+  const materialsJs = read(materialsJsPath);
+  try {
+    new Function(materialsJs);
+  } catch (error) {
+    fail(`materials.js syntax error: ${error.message}`);
+  }
+  ["manifestUrl", "mediaBaseUrl", "renderAssets", "applyFilters"].forEach((term) => {
+    if (!materialsJs.includes(term)) fail(`materials.js is missing required data hook: ${term}.`);
+  });
+}
+
+if (fs.existsSync(materialsConfigPath)) {
+  const config = JSON.parse(read(materialsConfigPath));
+  if (!Object.prototype.hasOwnProperty.call(config, "manifestUrl")) fail("Materials config is missing manifestUrl.");
+  if (!Object.prototype.hasOwnProperty.call(config, "mediaBaseUrl")) fail("Materials config is missing mediaBaseUrl.");
+  if (!Object.prototype.hasOwnProperty.call(config, "uploadUrl")) fail("Materials config is missing uploadUrl.");
+}
 
 const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
 if (!scriptMatch) {

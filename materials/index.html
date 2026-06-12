@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="L-One Materials 素材库，统一浏览、筛选和管理创作素材。">
+  <title>L-One Materials｜素材库</title>
+  <link rel="stylesheet" href="materials.css?v=20260612-2">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../index.html#home">L-One</a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="../index.html#recent"><strong>Recent</strong><span>最近</span></a>
+        <a href="../index.html#works"><strong>Works</strong><span>作品</span></a>
+        <a href="../index.html#skills"><strong>Skills</strong><span>技能库</span></a>
+        <a class="active" href="./"><strong>Materials</strong><span>素材库</span></a>
+        <a href="../index.html#about"><strong>About</strong><span>L-One</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="materials-page">
+    <section class="materials-hero">
+      <div>
+        <p class="eyebrow">L-One Materials</p>
+        <h1>素材库</h1>
+        <p class="intro">统一浏览、筛选和管理创作素材。媒体迁移完成后，素材会从配置中的统一云端地址加载。</p>
+      </div>
+      <button class="upload-button" type="button" data-upload disabled title="上传后台将在后续阶段接入">素材上传</button>
+    </section>
+
+    <section class="materials-controls" aria-label="素材筛选">
+      <label class="search-box">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="search" placeholder="搜索素材" aria-label="搜索素材" data-search>
+        <span class="search-count" data-search-count>0 项</span>
+      </label>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <span class="filter-label">分类</span>
+          <div class="filter-options" data-category-filters>
+            <button class="is-active" type="button" data-category="全部">全部</button>
+          </div>
+        </div>
+        <button class="filter-toggle" type="button" data-filter-toggle aria-expanded="false">更多筛选</button>
+      </div>
+
+      <div class="filter-drawer" data-filter-drawer hidden>
+        <div class="filter-group">
+          <span class="filter-label">文件类型</span>
+          <div class="filter-options" data-type-filters><span class="filter-empty">等待素材数据</span></div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">标签</span>
+          <div class="filter-options" data-tag-filters><span class="filter-empty">等待素材数据</span></div>
+        </div>
+        <button class="clear-filters" type="button" data-clear-filters>清除筛选</button>
+      </div>
+    </section>
+
+    <section class="materials-toolbar" aria-label="视图设置">
+      <p><strong data-visible-count>0</strong> 个素材</p>
+      <div class="toolbar-controls">
+        <div class="segmented" aria-label="素材视图">
+          <button class="is-active" type="button" data-view="grid">网格</button>
+          <button type="button" data-view="list">列表</button>
+          <button type="button" data-view="folder">文件夹</button>
+        </div>
+        <label class="size-control">预览尺寸
+          <select data-size>
+            <option value="small">小</option>
+            <option value="medium" selected>中</option>
+            <option value="large">大</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="asset-stage" aria-live="polite">
+      <div class="loading-state" data-loading>正在读取素材清单…</div>
+      <div class="asset-collection view-grid size-medium" data-asset-collection hidden></div>
+      <div class="empty-state" data-empty hidden>
+        <span class="empty-mark" aria-hidden="true">M</span>
+        <h2>暂无素材</h2>
+        <p>页面结构已经接入主站。完成存储路径规划后，可通过统一配置载入缩略图、预览视频和原始文件。</p>
+      </div>
+      <div class="error-state" data-error hidden>
+        <h2>素材清单读取失败</h2>
+        <p data-error-message></p>
+        <button type="button" data-retry>重新读取</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="detail-backdrop" data-detail-backdrop hidden>
+    <article class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <button class="detail-close" type="button" data-detail-close aria-label="关闭">×</button>
+      <div class="detail-preview" data-detail-preview></div>
+      <div class="detail-info">
+        <p class="eyebrow" data-detail-category>Materials</p>
+        <h2 id="detail-title" data-detail-title></h2>
+        <dl>
+          <div><dt>文件类型</dt><dd data-detail-types></dd></div>
+          <div><dt>文件路径</dt><dd data-detail-path></dd></div>
+        </dl>
+        <div class="detail-tags" data-detail-tags></div>
+        <a class="download-button" data-detail-download download>下载原始素材</a>
+      </div>
+    </article>
+  </div>
+
+  <script src="materials.js?v=20260612"></script>
+</body>
+</html>

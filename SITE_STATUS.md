@@ -1,6 +1,6 @@
 # L-One Main Site Status
 
-更新时间：2026-06-07
+更新时间：2026-06-12
 
 ## 项目位置
 
@@ -58,6 +58,13 @@
         metadata.json
   scripts/
     site-audit.js
+  materials/
+    index.html
+    materials.css
+    materials.js
+    config.json
+    data/
+      assets.json
   index.html
   README.md
   SITE_STATUS.md
@@ -131,6 +138,9 @@
 - 腾讯云 EdgeOne Pages 应根据 GitHub 仓库自动重新部署；若未自动更新，由本“网站上线”对话负责提醒到控制台手动重新部署。
 
 ## 最近变更
+- 2026-06-12：修正 M3 首页中央导航在新增 Materials 后仍使用四列网格导致 About 换行的问题，五个入口现固定为同一行；素材库页面背景与粘性页头底色统一为主站白色，并增加对应自动审查规则。本次未改动作品内容、其他页面布局及素材数据。
+- 2026-06-12：新增主站一级入口 `Materials / 素材库`，建立稳定路径 `/materials/`。当前完成素材库页面结构、统一数据配置和空数据清单，包含关键词搜索、分类、文件类型、标签、网格/列表/文件夹视图、预览尺寸、素材数量、空状态、详情弹层、下载入口和“素材上传”占位按钮；本阶段未复制或迁移任何原始图片、GIF、视频及 Hugging Face 媒体。主站顶部导航、M3 首页中心导航、首页搜索和 Motion Library 导航均已加入 Materials 入口。`scripts/site-audit.js` 已增加 Materials 文件、导航、配置和功能骨架检查。Works、Skills 内容、作品数据和首页视觉参数未改动。
+- 2026-06-08：新增 Skills 板块“素材库”分类入口，接入独立静态页面 `motion-library.html` / `motion-library.css` / `motion-library.js`，页面名称为《L-One Motion Library｜文字动效图书馆》；Skills 网格新增“文字动效图书馆”卡片，首页搜索索引新增 Motion Library 入口，独立页导航对齐主站 `#recent/#works/#skills/#about`。Works、作品详情页和首页 M3 视觉参数未改动。
 
 - 2026-06-07：根据线上首页视觉反馈调整 M3 首页明暗与交互强度：首页背景层整体亮度降低约 30%，鼠标跟随柔光/烟雾光晕半径缩小约 30%，同时收低交互高光透明度，提升中心导航文字和搜索框可读性。本次仅改首页视觉参数，Recent、Works、Skills、About 路由和作品数据未改动。
 - 2026-06-06：在 M3 首页基础上增加入口型信息结构：顶部居中保留 `L-One`，中心加入 `recent / work / skills / about` 四个导航文字和极简站内搜索框；新增 `#recent` 二级页面，集中承接最近更新的作品与入口；顶部 header 的 Recent 改为跳转 `#recent`。搜索框当前使用前端轻量索引，覆盖 Recent、Works、Skills、About 和已接入作品标题/关键词。Works 分类、作品详情页和素材归档未改动。
