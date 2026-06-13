@@ -10,6 +10,7 @@ const materialsCssPath = path.join(materialsDir, "materials.css");
 const materialsJsPath = path.join(materialsDir, "materials.js");
 const materialsConfigPath = path.join(materialsDir, "config.json");
 const materialsDataPath = path.join(materialsDir, "data", "assets.json");
+const motionLibraryHtmlPath = path.join(root, "motion-library.html");
 
 const SOURCE_PLATFORM = "\u5c0f\u7ea2\u4e66";
 const TYPE_IMAGE_TEXT = "\u56fe\u6587";
@@ -62,6 +63,28 @@ if (!html.includes('href="materials/"') || !html.includes('<strong>Materials</st
 if (!html.includes('{ url: "materials/", title: "Materials"')) {
   fail("Home search index should include the Materials page.");
 }
+if (!html.includes('<strong>Notes</strong><span>\u5b66\u4e60\u7b14\u8bb0</span>')) {
+  fail("Main navigation should display Notes / \u5b66\u4e60\u7b14\u8bb0.");
+}
+if (!html.includes('<span class="en">notes</span><span class="zh">\u5b66\u4e60\u7b14\u8bb0</span>')) {
+  fail("Home center navigation should display notes / \u5b66\u4e60\u7b14\u8bb0.");
+}
+if (!html.includes('<h1>Notes \u5b66\u4e60\u7b14\u8bb0</h1>')) {
+  fail("Notes page title is missing.");
+}
+if (!html.includes('{ route: "skills", title: "Notes"')) {
+  fail("Home search index should expose the renamed Notes page.");
+}
+const notesSection = html.match(/<section class="page" id="page-skills">([\s\S]*?)<\/section>/)?.[1] || "";
+if ((notesSection.match(/class="lib-card"/g) || []).length !== 1) {
+  fail("Notes page should contain exactly one published content card.");
+}
+if (!notesSection.includes('href="motion-library.html"') || !notesSection.includes("\u6587\u5b57\u52a8\u6548\u56fe\u4e66\u9986")) {
+  fail("Notes page should retain the Motion Library card.");
+}
+if (notesSection.includes('class="filters"')) {
+  fail("Notes page should not show empty category filters.");
+}
 if (!/\.home-m3-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/.test(html)) {
   fail("Home center navigation should keep all five links on one row.");
 }
@@ -98,6 +121,9 @@ if (fs.existsSync(materialsHtmlPath)) {
   if (!materialsHtml.includes('href="../index.html#home"')) {
     fail("Materials page should link back to the main site home route.");
   }
+  if (!materialsHtml.includes('<strong>Notes</strong><span>\u5b66\u4e60\u7b14\u8bb0</span>')) {
+    fail("Materials navigation should display Notes / \u5b66\u4e60\u7b14\u8bb0.");
+  }
 }
 
 if (fs.existsSync(materialsCssPath)) {
@@ -120,6 +146,19 @@ if (fs.existsSync(materialsJsPath)) {
   ["manifestUrl", "mediaBaseUrl", "renderAssets", "applyFilters"].forEach((term) => {
     if (!materialsJs.includes(term)) fail(`materials.js is missing required data hook: ${term}.`);
   });
+}
+
+if (fs.existsSync(motionLibraryHtmlPath)) {
+  const motionLibraryHtml = read(motionLibraryHtmlPath);
+  if (motionLibraryHtml.includes('<strong>Motion Library</strong>')) {
+    fail("Motion Library should not appear as a top-level navigation item.");
+  }
+  if (!motionLibraryHtml.includes('<strong>Notes</strong><span>&#23398;&#20064;&#31508;&#35760;</span>')) {
+    fail("Motion Library navigation should identify Notes as its parent section.");
+  }
+  if (!motionLibraryHtml.includes('class="motion-back-link" href="index.html#skills"')) {
+    fail("Motion Library should include a back link to Notes.");
+  }
 }
 
 if (fs.existsSync(materialsConfigPath)) {

@@ -55,17 +55,21 @@ async function copyText(text) {
   document.body.appendChild(textarea);
   textarea.focus();
   textarea.select();
-  document.execCommand("copy");
+  if (!document.execCommand("copy")) {
+    textarea.remove();
+    throw new Error("Clipboard copy was rejected.");
+  }
   textarea.remove();
 }
 
 function bindCopyButtons() {
   document.querySelectorAll(".code-panel").forEach((panel) => {
     const button = panel.querySelector(".copy-btn");
-    const code = panel.querySelector(".snippet-code");
-    if (!button || !code) return;
+    if (!button) return;
 
     button.addEventListener("click", async () => {
+      const code = panel.querySelector(".snippet-code.is-active");
+      if (!code) return;
       try {
         await copyText(code.textContent);
         button.textContent = "\u5df2\u590d\u5236";
@@ -84,6 +88,24 @@ function bindCopyButtons() {
   });
 }
 
+function bindCodeVersionSwitches() {
+  document.querySelectorAll(".code-panel").forEach((panel) => {
+    const buttons = panel.querySelectorAll("[data-code-select]");
+    const codeBlocks = panel.querySelectorAll("[data-code-version]");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const version = button.dataset.codeSelect;
+        buttons.forEach((item) => item.classList.toggle("is-active", item === button));
+        codeBlocks.forEach((code) => {
+          const active = code.dataset.codeVersion === version;
+          code.classList.toggle("is-active", active);
+          code.closest("pre").hidden = !active;
+        });
+      });
+    });
+  });
+}
+
 function bindDeleteButtons() {
   document.querySelectorAll(".effect-card[data-motion-id]").forEach((card) => {
     const button = card.querySelector(".delete-card");
@@ -97,14 +119,11 @@ function bindDeleteButtons() {
     });
   });
 
-  document.querySelector("[data-restore-cards]")?.addEventListener("click", () => {
-    localStorage.removeItem(deletedStorageKey);
-    document.querySelectorAll(".effect-card.is-hidden").forEach((card) => card.classList.remove("is-hidden"));
-  });
 }
 
 applyDeletedCards();
 runCount();
 setInterval(() => runCount(), 2600);
 bindCopyButtons();
+bindCodeVersionSwitches();
 bindDeleteButtons();

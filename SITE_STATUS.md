@@ -1,6 +1,6 @@
 # L-One Main Site Status
 
-更新时间：2026-06-12
+更新时间：2026-06-13
 
 ## 项目位置
 
@@ -57,6 +57,9 @@
         image-01.webp ... image-13.webp
         metadata.json
   scripts/
+    audit-motion-library.js
+    build-motion-library.js
+    migrate-motion-library-data.js
     site-audit.js
   materials/
     index.html
@@ -66,6 +69,10 @@
     data/
       assets.json
   index.html
+  motion-library-data.json
+  motion-library.html
+  motion-library.css
+  motion-library.js
   README.md
   SITE_STATUS.md
   TASK_GUARDRAILS.md
@@ -138,6 +145,8 @@
 - 腾讯云 EdgeOne Pages 应根据 GitHub 仓库自动重新部署；若未自动更新，由本“网站上线”对话负责提醒到控制台手动重新部署。
 
 ## 最近变更
+- 2026-06-13：将全站 `Skills / 技能库` 显示名称统一调整为 `Notes / 学习笔记`，内部路由继续保留 `#skills` 以兼容既有入口；Notes 主页面移除未发布的分类按钮和 20 张占位卡片，仅保留真实的“文字动效图书馆”入口。Motion Library 从一级导航中移除，顶部 Notes 标记为当前父级栏目，并在标题上方增加“返回 Notes”入口；删除“恢复已删除”按钮及对应恢复监听，单卡删除和本地删除记录继续保留。页面背景统一为主站白色，卡片仅使用黑白灰亮度层级。`scripts/site-audit.js` 与 `scripts/audit-motion-library.js` 已增加对应回归规则；64 个动效数据、独立命名空间和两种复制代码未改动。
+- 2026-06-12：重建 Motion Library 的代码交付系统。新增 `motion-library-data.json`，将 64 个动效拆分为独立的名称、说明、HTML、专属 CSS 和可选 JavaScript；新增迁移脚本、统一生成器及独立审查脚本。每个效果使用 `l1-motion-XX-*` 命名空间和专属关键帧，复制区提供“独立 HTML / 嵌入组件”两种网页代码。64 个代码包均已移除其他效果和旧 `tpl-*` 选择器，仅第 5 个数字计数效果保留作用域受限的 JavaScript。页面原有四列预览、移动端单列、删除和恢复功能保持不变。
 - 2026-06-12：修正 M3 首页中央导航在新增 Materials 后仍使用四列网格导致 About 换行的问题，五个入口现固定为同一行；素材库页面背景与粘性页头底色统一为主站白色，并增加对应自动审查规则。本次未改动作品内容、其他页面布局及素材数据。
 - 2026-06-12：新增主站一级入口 `Materials / 素材库`，建立稳定路径 `/materials/`。当前完成素材库页面结构、统一数据配置和空数据清单，包含关键词搜索、分类、文件类型、标签、网格/列表/文件夹视图、预览尺寸、素材数量、空状态、详情弹层、下载入口和“素材上传”占位按钮；本阶段未复制或迁移任何原始图片、GIF、视频及 Hugging Face 媒体。主站顶部导航、M3 首页中心导航、首页搜索和 Motion Library 导航均已加入 Materials 入口。`scripts/site-audit.js` 已增加 Materials 文件、导航、配置和功能骨架检查。Works、Skills 内容、作品数据和首页视觉参数未改动。
 - 2026-06-08：新增 Skills 板块“素材库”分类入口，接入独立静态页面 `motion-library.html` / `motion-library.css` / `motion-library.js`，页面名称为《L-One Motion Library｜文字动效图书馆》；Skills 网格新增“文字动效图书馆”卡片，首页搜索索引新增 Motion Library 入口，独立页导航对齐主站 `#recent/#works/#skills/#about`。Works、作品详情页和首页 M3 视觉参数未改动。
