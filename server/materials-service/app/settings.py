@@ -10,6 +10,7 @@ FAILED_ROOT = STATE_ROOT / "failed"
 RECYCLE_ROOT = STATE_ROOT / "recycle"
 BACKUP_ROOT = STATE_ROOT / "backups"
 DATABASE_PATH = STATE_ROOT / "jobs.db"
+ADMIN_CREDENTIALS_PATH = STATE_ROOT / "admin-credentials.json"
 ASSET_ROOT = PUBLIC_ROOT / "assets"
 MANIFEST_PATH = PUBLIC_ROOT / "data" / "assets.json"
 FFMPEG = os.environ.get("LONE_FFMPEG", "/usr/bin/ffmpeg")

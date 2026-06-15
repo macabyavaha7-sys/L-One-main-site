@@ -279,3 +279,74 @@ def attach_tags(content_id: str, tag_names: list[str]) -> dict:
             )
         connection.commit()
     return get_content(content_id)
+
+
+def list_categories(target: str | None = None) -> list[dict]:
+    clauses = "WHERE target=?" if target else ""
+    values = (target,) if target else ()
+    with closing(database.connect()) as connection:
+        rows = connection.execute(
+            f"SELECT id,target,slug,name FROM categories {clauses} ORDER BY name", values
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def list_tags(target: str | None = None) -> list[dict]:
+    clauses = "WHERE target=?" if target else ""
+    values = (target,) if target else ()
+    with closing(database.connect()) as connection:
+        rows = connection.execute(
+            f"SELECT id,target,slug,name FROM tags {clauses} ORDER BY name", values
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def list_public_content(target: str | None = None, content_type: str | None = None, now: str | None = None) -> list[dict]:
+    clauses = ["status='published'", "(publish_at IS NULL OR publish_at='' OR publish_at<=?)"]
+    values = [now or utc_now()]
+    if target:
+        clauses.append("target=?")
+        values.append(target)
+    if content_type:
+        clauses.append("content_type=?")
+        values.append(content_type)
+    with closing(database.connect()) as connection:
+        rows = connection.execute(
+            f"SELECT * FROM content_items WHERE {' AND '.join(clauses)} ORDER BY COALESCE(publish_at,updated_at) DESC",
+            values,
+        ).fetchall()
+        return [_row_to_item(connection, row) for row in rows]
+
+
+def get_public_content(target: str, slug: str, now: str | None = None) -> dict:
+    with closing(database.connect()) as connection:
+        row = connection.execute(
+            """SELECT * FROM content_items
+               WHERE target=? AND slug=? AND status='published'
+               AND (publish_at IS NULL OR publish_at='' OR publish_at<=?)""",
+            (target, slug, now or utc_now()),
+        ).fetchone()
+        if row is None:
+            raise ContentNotFound("Content not found")
+        return _row_to_item(connection, row)
+
+
+def list_public_taxonomy(kind: str, target: str, now: str | None = None) -> list[dict]:
+    if kind == "categories":
+        table, relation, foreign = "categories", "content_categories", "category_id"
+    elif kind == "tags":
+        table, relation, foreign = "tags", "content_tags", "tag_id"
+    else:
+        raise ContentValidationError("Invalid taxonomy kind")
+    with closing(database.connect()) as connection:
+        rows = connection.execute(
+            f"""SELECT DISTINCT term.id,term.target,term.slug,term.name
+                FROM {table} term
+                JOIN {relation} relation ON relation.{foreign}=term.id
+                JOIN content_items content ON content.id=relation.content_id
+                WHERE term.target=? AND content.status='published'
+                AND (content.publish_at IS NULL OR content.publish_at='' OR content.publish_at<=?)
+                ORDER BY term.name""",
+            (target, now or utc_now()),
+        ).fetchall()
+    return [dict(row) for row in rows]
