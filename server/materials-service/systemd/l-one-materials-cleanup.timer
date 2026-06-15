@@ -2,8 +2,8 @@
 Description=Run L-One materials cleanup hourly
 
 [Timer]
-OnBootSec=10min
-OnUnitActiveSec=1h
+OnCalendar=daily
+RandomizedDelaySec=30min
 Persistent=true
 
 [Install]

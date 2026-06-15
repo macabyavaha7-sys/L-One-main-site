@@ -3,9 +3,10 @@ import os
 import re
 import shutil
 import subprocess
+import time
 from pathlib import Path
 
-from .settings import ASSET_ROOT, FFMPEG, FFPROBE, MANIFEST_PATH, PROCESSING_ROOT
+from .settings import ASSET_ROOT, FFMPEG, FFPROBE, MANIFEST_PATH, PROCESSING_ROOT, RECYCLE_ROOT
 
 
 def run(command: list[str]) -> None:
@@ -39,7 +40,8 @@ def scale_filter(max_edge: int, fps: int | None = None) -> str:
 def process(job: dict) -> dict:
     source = Path(job["source_path"])
     working = PROCESSING_ROOT / job["id"]
-    final = ASSET_ROOT / job["id"]
+    asset_id = job.get("replace_asset_id") or job["id"]
+    final = ASSET_ROOT / asset_id
     shutil.rmtree(working, ignore_errors=True)
     working.mkdir(parents=True)
     info = probe(source)
@@ -76,7 +78,7 @@ def process(job: dict) -> dict:
         raise RuntimeError("preview exceeds 640 pixels")
 
     asset = {
-        "id": job["id"],
+        "id": asset_id,
         "title": job["title"],
         "category": job["category"],
         "tags": job["tags"],
@@ -87,13 +89,12 @@ def process(job: dict) -> dict:
         "duration": round(info["duration"], 3),
         "width": published["width"],
         "height": published["height"],
-        "video": f"assets/{job['id']}/video.mp4",
-        "previewVideo": f"assets/{job['id']}/preview.webm",
-        "thumbnail": f"assets/{job['id']}/thumbnail.webp",
+        "video": f"assets/{asset_id}/video.mp4",
+        "previewVideo": f"assets/{asset_id}/preview.webm",
+        "thumbnail": f"assets/{asset_id}/thumbnail.webp",
     }
     (working / "metadata.json").write_text(json.dumps(asset, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    shutil.rmtree(final, ignore_errors=True)
-    os.replace(working, final)
+    publish_directory(working, asset_id)
     rebuild_manifest()
     return asset
 
@@ -119,12 +120,46 @@ def list_assets() -> list[dict]:
     return data if isinstance(data, list) else []
 
 
-def delete_asset(asset_id: str) -> bool:
+def recycle_name(asset_id: str, now: int | None = None) -> str:
+    return f"{asset_id}-{int(time.time() if now is None else now)}"
+
+
+def publish_directory(working: Path, asset_id: str, now: int | None = None) -> Path:
+    final = ASSET_ROOT / asset_id
+    RECYCLE_ROOT.mkdir(parents=True, exist_ok=True)
+    if final.exists():
+        os.replace(final, RECYCLE_ROOT / recycle_name(asset_id, now))
+    os.replace(working, final)
+    return final
+
+
+def soft_delete_asset(asset_id: str, now: int | None = None) -> bool:
     if not re.fullmatch(r"[0-9a-f]{32}", asset_id):
         return False
     target = ASSET_ROOT / asset_id
     if not target.is_dir():
         return False
-    shutil.rmtree(target)
+    RECYCLE_ROOT.mkdir(parents=True, exist_ok=True)
+    os.replace(target, RECYCLE_ROOT / recycle_name(asset_id, now))
     rebuild_manifest()
     return True
+
+
+def delete_asset(asset_id: str) -> bool:
+    return soft_delete_asset(asset_id)
+
+
+def cleanup_recycle(root: Path = RECYCLE_ROOT, retention_seconds: int = 604800, now: int | None = None) -> int:
+    if not root.exists():
+        return 0
+    current = time.time() if now is None else now
+    removed = 0
+    for path in root.iterdir():
+        if path.stat().st_mtime + retention_seconds >= current:
+            continue
+        if path.is_dir():
+            shutil.rmtree(path, ignore_errors=True)
+        else:
+            path.unlink(missing_ok=True)
+        removed += 1
+    return removed
