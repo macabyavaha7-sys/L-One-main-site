@@ -1,0 +1,8 @@
+[Unit]
+Description=Clean stale L-One material upload files
+
+[Service]
+Type=oneshot
+User=lone-materials
+Group=lone-materials
+ExecStart=/opt/l-one-materials/venv/bin/python /opt/l-one-materials/cleanup.py

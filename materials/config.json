@@ -1,5 +1,5 @@
 {
-  "manifestUrl": "data/assets.json",
-  "mediaBaseUrl": "",
+  "manifestUrl": "https://static.l-one.asia/materials/data/assets.json",
+  "mediaBaseUrl": "https://static.l-one.asia/materials/",
   "uploadUrl": ""
 }

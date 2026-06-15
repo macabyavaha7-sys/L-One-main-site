@@ -1,0 +1,20 @@
+[Unit]
+Description=L-One Materials Serial Worker
+After=network.target l-one-materials-api.service
+
+[Service]
+User=lone-materials
+Group=lone-materials
+EnvironmentFile=/etc/l-one-materials.env
+WorkingDirectory=/opt/l-one-materials
+ExecStart=/opt/l-one-materials/venv/bin/python -m app.worker
+Restart=on-failure
+RestartSec=3
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

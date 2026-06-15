@@ -1,0 +1,17 @@
+[Unit]
+Description=L-One Materials API
+After=network.target
+
+[Service]
+User=lone-materials
+Group=lone-materials
+EnvironmentFile=/etc/l-one-materials.env
+WorkingDirectory=/opt/l-one-materials
+ExecStart=/opt/l-one-materials/venv/bin/uvicorn app.api:app --host 127.0.0.1 --port 8010 --workers 1
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

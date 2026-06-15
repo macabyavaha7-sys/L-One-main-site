@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L-One 素材管理</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f5f3;
+      --surface: #ffffff;
+      --ink: #161616;
+      --muted: #737373;
+      --line: #d8d8d4;
+      --accent: #002fa7;
+      --danger: #a11b1b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1440px, calc(100% - 48px)); margin: 0 auto; padding: 34px 0 72px; }
+    .masthead, .section-head, .toolbar, .job, .asset { display: flex; align-items: center; }
+    .masthead { justify-content: space-between; gap: 24px; padding-bottom: 26px; border-bottom: 1px solid var(--ink); }
+    .brand { margin: 0; font-size: clamp(28px, 4vw, 54px); font-weight: 500; letter-spacing: -0.04em; }
+    .eyebrow, .meta, .status, .feedback { color: var(--muted); font-size: 13px; }
+    .auth { display: flex; gap: 8px; width: min(520px, 100%); }
+    input, button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--surface);
+      color: var(--ink);
+      padding: 10px 12px;
+    }
+    input { width: 100%; }
+    button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+    button.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button.danger { color: var(--danger); }
+    button:disabled { cursor: wait; opacity: .5; }
+    .notice { min-height: 22px; margin: 12px 0 0; color: var(--muted); font-size: 14px; }
+    .dashboard { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 28px; margin-top: 34px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); padding: 22px; }
+    .panel-wide { grid-column: 1 / -1; }
+    .section-head { justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    h2 { margin: 0; font-size: 20px; font-weight: 500; }
+    .upload-form { display: grid; gap: 12px; }
+    .upload-form label { display: grid; gap: 7px; font-size: 13px; color: var(--muted); }
+    .file-input { padding: 9px; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .stat { padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .stat strong { display: block; margin-top: 8px; font-size: 22px; font-weight: 500; }
+    .list { display: grid; border-top: 1px solid var(--line); }
+    .empty { padding: 30px 0; color: var(--muted); }
+    .job, .asset { justify-content: space-between; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .job-main, .asset-main { min-width: 0; flex: 1; }
+    .title { margin: 0 0 6px; font-size: 15px; overflow-wrap: anywhere; }
+    .toolbar { gap: 8px; flex-wrap: wrap; }
+    .toolbar button { min-height: 34px; padding: 7px 10px; font-size: 13px; }
+    .status { display: inline-block; padding: 4px 7px; border: 1px solid var(--line); color: var(--ink); }
+    .status.processing, .status.queued { border-color: var(--accent); color: var(--accent); }
+    .status.failed { border-color: var(--danger); color: var(--danger); }
+    .error { margin-top: 8px; color: var(--danger); font-size: 13px; white-space: pre-wrap; }
+    .asset-preview { width: 92px; aspect-ratio: 16 / 9; flex: 0 0 auto; object-fit: cover; background: #e5e5e2; }
+    .locked .dashboard { opacity: .42; pointer-events: none; }
+    @media (max-width: 820px) {
+      .shell { width: min(100% - 28px, 720px); padding-top: 20px; }
+      .masthead { align-items: flex-start; flex-direction: column; }
+      .auth { width: 100%; }
+      .dashboard { grid-template-columns: 1fr; }
+      .panel-wide { grid-column: auto; }
+      .stat-grid { grid-template-columns: 1fr; }
+      .job, .asset { align-items: flex-start; flex-direction: column; }
+      .asset-preview { width: 100%; }
+    }
+  </style>
+</head>
+<body class="locked">
+  <main class="shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">L-One Materials Service</p>
+        <h1 class="brand">素材管理</h1>
+      </div>
+      <form class="auth" id="auth-form">
+        <input id="token" type="password" autocomplete="current-password" placeholder="管理令牌" required>
+        <button class="primary" type="submit">进入管理页</button>
+      </form>
+    </header>
+    <p class="notice" id="notice">通过 SSH 安全通道访问。令牌仅保存在当前浏览器标签页。</p>
+
+    <div class="dashboard">
+      <section class="panel" aria-labelledby="upload-heading">
+        <div class="section-head">
+          <h2 id="upload-heading">上传素材</h2>
+          <span class="meta">单文件上限 2 GB</span>
+        </div>
+        <form class="upload-form" id="upload-form">
+          <label>素材标题<input name="title" required></label>
+          <label>分类<input name="category" value="未分类" required></label>
+          <label>标签<input name="tags" placeholder="多个标签用英文逗号分隔"></label>
+          <label>视频文件<input class="file-input" name="file" type="file" accept="video/*" required></label>
+          <button class="accent" type="submit">上传并加入队列</button>
+          <p class="feedback" id="upload-feedback" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="status-heading">
+        <div class="section-head">
+          <h2 id="status-heading">服务状态</h2>
+          <button id="refresh" type="button">刷新</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><span class="meta">等待转码</span><strong id="queued-count">0</strong></div>
+          <div class="stat"><span class="meta">处理中</span><strong id="processing-count">0</strong></div>
+          <div class="stat"><span class="meta">已发布</span><strong id="asset-count">0</strong></div>
+        </div>
+        <p class="notice" id="disk-status"></p>
+      </section>
+
+      <section class="panel panel-wide" id="jobs-panel" aria-labelledby="jobs-heading">
+        <div class="section-head"><h2 id="jobs-heading">转码任务</h2><span class="meta">失败任务可重试</span></div>
+        <div class="list" id="jobs-list"><p class="empty">输入管理令牌后加载任务。</p></div>
+      </section>
+
+      <section class="panel panel-wide" id="assets-panel" aria-labelledby="assets-heading">
+        <div class="section-head"><h2 id="assets-heading">已发布素材</h2><span class="meta">删除后立即更新公开清单</span></div>
+        <div class="list" id="assets-list"><p class="empty">输入管理令牌后加载素材。</p></div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const state = { token: sessionStorage.getItem('loneAdminToken') || '', jobs: [], assets: [] };
+    const $ = (selector) => document.querySelector(selector);
+    const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+    const bytes = (value) => `${(Number(value || 0) / 1024 / 1024 / 1024).toFixed(1)} GB`;
+    const headers = () => ({ 'X-L-One-Admin-Token': state.token });
+
+    async function request(url, options = {}) {
+      const response = await fetch(url, { ...options, headers: { ...headers(), ...(options.headers || {}) } });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.detail || `请求失败：${response.status}`);
+      return body;
+    }
+
+    function renderJobs() {
+      const list = $('#jobs-list');
+      if (!state.jobs.length) { list.innerHTML = '<p class="empty">当前没有转码任务。</p>'; return; }
+      list.innerHTML = state.jobs.map((job) => `
+        <article class="job">
+          <div class="job-main">
+            <p class="title">${escapeHtml(job.title)}</p>
+            <span class="status ${escapeHtml(job.status)}">${escapeHtml(job.status)}</span>
+            <span class="meta">${escapeHtml(job.original_name)} · ${new Date(job.created_at).toLocaleString('zh-CN')}</span>
+            ${job.error ? `<div class="error">${escapeHtml(job.error)}</div>` : ''}
+          </div>
+          <div class="toolbar">${job.status === 'failed' ? `<button data-retry="${job.id}">重试</button>` : ''}</div>
+        </article>`).join('');
+    }
+
+    function renderAssets() {
+      const list = $('#assets-list');
+      if (!state.assets.length) { list.innerHTML = '<p class="empty">当前没有已发布素材。</p>'; return; }
+      list.innerHTML = state.assets.map((asset) => `
+        <article class="asset">
+          <img class="asset-preview" src="/materials/${escapeHtml(asset.thumbnail)}" alt="" loading="lazy">
+          <div class="asset-main"><p class="title">${escapeHtml(asset.title)}</p><span class="meta">${escapeHtml(asset.category)} · ${Number(asset.duration || 0).toFixed(1)} 秒 · ${asset.width} × ${asset.height}</span></div>
+          <div class="toolbar"><a href="/materials/${escapeHtml(asset.video)}" target="_blank" rel="noopener">预览</a><button class="danger" data-delete="${asset.id}">删除</button></div>
+        </article>`).join('');
+    }
+
+    async function refresh() {
+      const [health, jobs, assets] = await Promise.all([
+        request('/api/health'), request('/api/admin/jobs'), request('/api/admin/assets')
+      ]);
+      state.jobs = jobs; state.assets = assets;
+      $('#queued-count').textContent = jobs.filter((job) => job.status === 'queued').length;
+      $('#processing-count').textContent = jobs.filter((job) => job.status === 'processing').length;
+      $('#asset-count').textContent = assets.length;
+      $('#disk-status').textContent = `服务器剩余空间：${bytes(health.freeBytes)}`;
+      renderJobs(); renderAssets();
+    }
+
+    $('#auth-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); state.token = $('#token').value.trim();
+      try {
+        await refresh(); sessionStorage.setItem('loneAdminToken', state.token);
+        document.body.classList.remove('locked'); $('#notice').textContent = '管理权限已验证。';
+      } catch (error) { $('#notice').textContent = error.message; }
+    });
+
+    $('#upload-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget; const button = form.querySelector('button'); const feedback = $('#upload-feedback');
+      button.disabled = true; feedback.textContent = '上传中，请保持页面打开。';
+      try {
+        const result = await request('/api/admin/assets', { method: 'POST', body: new FormData(form) });
+        feedback.textContent = `任务 ${result.id} 已加入队列。`; form.reset(); form.category.value = '未分类'; await refresh();
+      } catch (error) { feedback.textContent = error.message; }
+      finally { button.disabled = false; }
+    });
+
+    $('#refresh').addEventListener('click', () => refresh().catch((error) => $('#notice').textContent = error.message));
+    $('#jobs-list').addEventListener('click', async (event) => {
+      const id = event.target.dataset.retry; if (!id) return;
+      await request(`/api/admin/jobs/${id}/retry`, { method: 'POST' }); await refresh();
+    });
+    $('#assets-list').addEventListener('click', async (event) => {
+      const id = event.target.dataset.delete; if (!id || !confirm('确认删除这条素材及其转码文件？')) return;
+      await request(`/api/admin/assets/${id}`, { method: 'DELETE' }); await refresh();
+    });
+
+    if (state.token) { $('#token').value = state.token; refresh().then(() => document.body.classList.remove('locked')).catch(() => sessionStorage.removeItem('loneAdminToken')); }
+  </script>
+</body>
+</html>
