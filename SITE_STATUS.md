@@ -5,7 +5,7 @@
 ## 2026-06-15 固定素材管理后台
 
 - 素材管理服务已增量部署到腾讯云轻量服务器 `62.234.73.162`，现有主站、素材静态地址和转码服务未被覆盖。
-- 新增固定后台域名规划：`https://admin.l-one.asia`。服务器 Nginx 已配置该域名，当前等待 Cloudflare 增加 DNS 记录并签发 HTTPS 证书。
+- 固定后台域名：`https://admin.l-one.asia`。DNS、Nginx 与 HTTPS 证书均已完成配置并通过公网验证。
 - 后台提供账号登录、CSRF 防护、登录限流、素材上传、转码状态、失败重试、素材替换、软删除、磁盘容量提示和操作记录。
 - 删除素材先进入服务器 `/var/lib/l-one-materials/recycle`，保留 7 天；数据库与公开素材清单备份位于 `/var/lib/l-one-materials/backups`。
 - 后台登录凭据仅保存在 D 盘安全目录 `D:\L-One Center\server-access\l-one-admin-credentials.txt`，未写入 GitHub。
@@ -191,3 +191,10 @@
 2. 新作品若只是少量图片，可先走 GitHub + EdgeOne；若素材较多，优先测试上传到轻量服务器素材仓库。
 3. 备案通过后绑定 `l-one.asia` 和 `static.l-one.asia`。
 4. 素材量超过轻量服务器适合范围后，迁移到腾讯云 COS/对象存储。
+# 2026-06-15 管理后台正式接通
+
+- 固定管理后台已上线：`https://admin.l-one.asia/admin/`。
+- `admin.l-one.asia` 已解析至腾讯云轻量服务器 `62.234.73.162`，HTTPS 证书签发并部署成功。
+- HTTP 已使用 301 重定向至 HTTPS；HSTS 暂时保持关闭。
+- 公网登录、会话 Cookie、CSRF、容量接口和后台状态接口已验证通过。
+- 管理后台登录凭据保存在：`D:\L-One Center\server-access\l-one-admin-credentials.txt`。
