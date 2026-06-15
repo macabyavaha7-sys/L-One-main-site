@@ -52,7 +52,10 @@ class PublicContentApiTests(unittest.TestCase):
 
         response = self.client.get("/api/public/v1/content?target=works&type=video")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual([item["title"] for item in response.json()["data"]], ["Published video"])
+        payload = response.json()
+        self.assertEqual(payload["api_version"], "v1")
+        self.assertEqual(payload["next_cursor"], None)
+        self.assertEqual([item["title"] for item in payload["items"]], ["Published video"])
         self.assertIn("ETag", response.headers)
         cached = self.client.get(
             "/api/public/v1/content?target=works&type=video",
@@ -67,8 +70,9 @@ class PublicContentApiTests(unittest.TestCase):
         visible = self.client.get("/api/public/v1/content/works/visible-detail")
         hidden = self.client.get("/api/public/v1/content/works/hidden-detail")
         self.assertEqual(visible.status_code, 200)
-        self.assertEqual(visible.json()["data"]["id"], published["id"])
-        self.assertNotIn("updated_by", visible.json()["data"])
+        self.assertEqual(visible.json()["api_version"], "v1")
+        self.assertEqual(visible.json()["item"]["id"], published["id"])
+        self.assertNotIn("updated_by", visible.json()["item"])
         self.assertEqual(hidden.status_code, 404)
         self.assertTrue(draft["id"])
 
@@ -81,8 +85,8 @@ class PublicContentApiTests(unittest.TestCase):
         repository.attach_category(draft["id"], "private", "Private")
         repository.attach_tags(draft["id"], ["Hidden"])
 
-        categories = self.client.get("/api/public/v1/categories?target=works").json()["data"]
-        tags = self.client.get("/api/public/v1/tags?target=works").json()["data"]
+        categories = self.client.get("/api/public/v1/categories?target=works").json()["items"]
+        tags = self.client.get("/api/public/v1/tags?target=works").json()["items"]
         self.assertEqual([item["slug"] for item in categories], ["travel"])
         self.assertEqual([item["slug"] for item in tags], ["beijing"])
 
