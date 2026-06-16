@@ -1,5 +1,8 @@
 import hashlib
 import hmac
+import json
+import os
+import secrets
 import shutil
 import uuid
 from pathlib import Path
@@ -10,9 +13,10 @@ from pydantic import BaseModel
 
 from .database import create_job, initialize, list_audit, list_jobs, record_audit, retry_job
 from .pipeline import list_assets, soft_delete_asset
-from .security import LoginLimiter, create_session, read_session, valid_csrf, verify_password
+from .security import LoginLimiter, create_session, hash_password, read_session, valid_csrf, verify_password
 from .settings import (
     ADMIN_PASSWORD_HASH,
+    ADMIN_CREDENTIALS_PATH,
     ADMIN_TOKEN,
     ADMIN_USERNAME,
     ALLOWED_SUFFIXES,
@@ -38,6 +42,36 @@ class LoginRequest(BaseModel):
     password: str
 
 
+def current_credentials() -> tuple[str, str]:
+    if ADMIN_CREDENTIALS_PATH.exists():
+        try:
+            stored = json.loads(ADMIN_CREDENTIALS_PATH.read_text(encoding="utf-8"))
+            return stored.get("password_hash", ""), stored.get("session_secret", "")
+        except (OSError, json.JSONDecodeError):
+            pass
+    return ADMIN_PASSWORD_HASH, SESSION_SECRET
+
+
+def change_admin_password(current_password: str, new_password: str) -> None:
+    password_hash, _ = current_credentials()
+    if not verify_password(current_password, password_hash):
+        raise HTTPException(status_code=403, detail="Current password is invalid")
+    ADMIN_CREDENTIALS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    temporary = ADMIN_CREDENTIALS_PATH.with_suffix(".tmp")
+    temporary.write_text(
+        json.dumps(
+            {"password_hash": hash_password(new_password), "session_secret": secrets.token_urlsafe(48)},
+            separators=(",", ":"),
+        ),
+        encoding="utf-8",
+    )
+    temporary.replace(ADMIN_CREDENTIALS_PATH)
+    try:
+        os.chmod(ADMIN_CREDENTIALS_PATH, 0o600)
+    except OSError:
+        pass
+
+
 @app.on_event("startup")
 def startup() -> None:
     ensure_directories()
@@ -52,9 +86,10 @@ def authorize(
 ) -> dict:
     if ADMIN_TOKEN and token and hmac.compare_digest(token, ADMIN_TOKEN):
         return {"username": "deploy-token", "tokenAuth": True}
-    if not SESSION_SECRET:
+    _, session_secret = current_credentials()
+    if not session_secret:
         raise HTTPException(status_code=503, detail="Admin session is not configured")
-    session = read_session(request.cookies.get(SESSION_COOKIE, ""), SESSION_SECRET)
+    session = read_session(request.cookies.get(SESSION_COOKIE, ""), session_secret)
     if session is None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     if mutation and not valid_csrf(session, csrf_token or ""):
@@ -67,14 +102,15 @@ def login(payload: LoginRequest, request: Request) -> JSONResponse:
     client_key = request.client.host if request.client else "unknown"
     if not login_limiter.allowed(client_key):
         raise HTTPException(status_code=429, detail="Too many login attempts")
-    if not ADMIN_PASSWORD_HASH or not SESSION_SECRET:
+    password_hash, session_secret = current_credentials()
+    if not password_hash or not session_secret:
         raise HTTPException(status_code=503, detail="Admin login is not configured")
-    if payload.username != ADMIN_USERNAME or not verify_password(payload.password, ADMIN_PASSWORD_HASH):
+    if payload.username != ADMIN_USERNAME or not verify_password(payload.password, password_hash):
         login_limiter.record_failure(client_key)
         record_audit(payload.username[:80] or "unknown", "login", client_key, "failed")
         raise HTTPException(status_code=401, detail="Invalid credentials")
     login_limiter.clear(client_key)
-    session_token, csrf_token = create_session(ADMIN_USERNAME, SESSION_SECRET, SESSION_TTL_SECONDS)
+    session_token, csrf_token = create_session(ADMIN_USERNAME, session_secret, SESSION_TTL_SECONDS)
     response = JSONResponse({"username": ADMIN_USERNAME, "csrfToken": csrf_token})
     response.set_cookie(
         SESSION_COOKIE,
@@ -223,3 +259,15 @@ def remove(
 @app.get("/admin/", response_class=HTMLResponse)
 def admin_page() -> str:
     return ADMIN_PAGE.read_text(encoding="utf-8")
+
+
+app.state.authorize = authorize
+app.state.change_password = change_admin_password
+
+from .routers.admin_content import router as admin_content_router
+from .routers.admin_taxonomy import router as admin_taxonomy_router
+from .routers.public_content import router as public_content_router
+
+app.include_router(admin_content_router)
+app.include_router(admin_taxonomy_router)
+app.include_router(public_content_router)

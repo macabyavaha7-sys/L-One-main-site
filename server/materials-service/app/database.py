@@ -3,6 +3,7 @@ import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone
 
+from . import migrations
 from .settings import DATABASE_PATH
 
 
@@ -13,6 +14,8 @@ def utc_now() -> str:
 def connect() -> sqlite3.Connection:
     connection = sqlite3.connect(DATABASE_PATH, timeout=30)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys=ON")
+    connection.execute("PRAGMA busy_timeout=30000")
     return connection
 
 
@@ -50,6 +53,7 @@ def initialize() -> None:
         if "replace_asset_id" not in columns:
             connection.execute("ALTER TABLE jobs ADD COLUMN replace_asset_id TEXT")
         connection.commit()
+        migrations.apply_all(connection)
 
 
 def create_job(
